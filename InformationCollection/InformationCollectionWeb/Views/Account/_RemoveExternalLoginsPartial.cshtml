@@ -1,11 +1,11 @@
-﻿@model ICollection<InformationCollectionWeb.Models.ExternalLogin>
+﻿@model ICollection<TimiSoft.InformationCollectionWeb.Models.ExternalLogin>
 
 @if (Model.Count > 0)
 {
     <h3>已注册外部登录</h3>
     <table>
         <tbody>
-        @foreach (InformationCollectionWeb.Models.ExternalLogin externalLogin in Model)
+        @foreach (TimiSoft.InformationCollectionWeb.Models.ExternalLogin externalLogin in Model)
         {
             <tr>
                 <td>@externalLogin.ProviderDisplayName</td>

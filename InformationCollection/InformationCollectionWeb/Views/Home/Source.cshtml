@@ -1,0 +1,64 @@
+﻿@model List<TimiSoft.InformationCollection.Models.UserSource>
+@{
+    ViewBag.Title = "Source";
+}
+
+@{
+    ViewBag.Title = "源管理";
+}
+<div id="ContentFilter">
+    <h2 style="display:inline; margin-right:20px;">源管理</h2><a id="btnAddSource">添加源</a>
+    <div id="SourceList">
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <p>您还没有添加源。</p>
+        }
+        else
+        {
+            foreach (var userSource in Model)
+            {
+                <p>@userSource.SourceName -- @userSource.Url [@userSource.AddTime.ToString("yy-MM-dd HH:MM")]</p>
+            }
+        }
+    </div>
+</div>
+
+@Html.Partial("_AddSource", new TimiSoft.InformationCollection.Models.UserSource())
+
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $("#dialog-form").dialog({
+            autoOpen: false,
+            height: 300,
+            width: 550,
+            modal: true,
+            buttons: {
+                "添加": function () {
+                    var bValid = true;
+                    //bValid = bValid && checkLength(name, "username", 3, 16);
+                    //bValid = bValid && checkLength(email, "email", 6, 80);
+                    //bValid = bValid && checkLength(password, "password", 5, 16);
+                    //bValid = bValid && checkRegexp(name, /^[a-z]([0-9a-z_])+$/i, "Username may consist of a-z, 0-9, underscores, begin with a letter.");
+                    //bValid = bValid && checkRegexp(password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9");
+
+                    if (bValid) {
+                        $("form").submit();
+                    }
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            },
+            close: function () {
+                //allFields.val("").removeClass("ui-state-error");
+            }
+        });
+
+        $("#btnAddSource")
+            .button()
+            .click(function () {
+                $("#dialog-form").dialog("open");
+            });
+    });
+</script>

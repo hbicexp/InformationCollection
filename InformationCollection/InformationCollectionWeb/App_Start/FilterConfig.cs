@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace TimiSoft
+namespace TimiSoft.InformationCollectionWeb
 {
     public class FilterConfig
     {

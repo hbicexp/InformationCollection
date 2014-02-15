@@ -4,9 +4,10 @@ using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
-using TimiSoft.Models;
+using TimiSoft.InformationCollectionWeb.Models;
+using TimiSoft.InformationCollection.Models;
 
-namespace TimiSoft.Filters
+namespace TimiSoft.InformationCollectionWeb.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class InitializeSimpleMembershipAttribute : ActionFilterAttribute
@@ -25,11 +26,11 @@ namespace TimiSoft.Filters
         {
             public SimpleMembershipInitializer()
             {
-                Database.SetInitializer<UsersContext>(null);
+                Database.SetInitializer<DatabaseContext>(null);
 
                 try
                 {
-                    using (var context = new UsersContext())
+                    using (var context = new DatabaseContext())
                     {
                         if (!context.Database.Exists())
                         {
@@ -37,7 +38,6 @@ namespace TimiSoft.Filters
                             ((IObjectContextAdapter)context).ObjectContext.CreateDatabase();
                         }
                     }
-
                     WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
                 }
                 catch (Exception ex)

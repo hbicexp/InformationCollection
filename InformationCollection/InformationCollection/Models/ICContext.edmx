@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="InformationCollection.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="Source">
+          <Key>
+            <PropertyRef Name="SourceId" />
+          </Key>
+          <Property Name="SourceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SourceName" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Domain" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="4000" Nullable="false" />
+          <Property Name="Interval" Type="int" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SourceContent">
+          <Key>
+            <PropertyRef Name="SourceContentId" />
+          </Key>
+          <Property Name="SourceContentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SourceId" Type="int" Nullable="false" />
+          <Property Name="Content" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="ContentType" Type="int" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="5000" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="UserSourceLink">
+          <Key>
+            <PropertyRef Name="UserSourceLinkId" />
+          </Key>
+          <Property Name="UserSourceLinkId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SourceId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_SourceContent_Source">
+          <End Role="Source" Type="Self.Source" Multiplicity="1" />
+          <End Role="SourceContent" Type="Self.SourceContent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Source">
+              <PropertyRef Name="SourceId" />
+            </Principal>
+            <Dependent Role="SourceContent">
+              <PropertyRef Name="SourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSourceLink_Source">
+          <End Role="Source" Type="Self.Source" Multiplicity="1" />
+          <End Role="UserSourceLink" Type="Self.UserSourceLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Source">
+              <PropertyRef Name="SourceId" />
+            </Principal>
+            <Dependent Role="UserSourceLink">
+              <PropertyRef Name="SourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSourceLink_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="UserSourceLink" Type="Self.UserSourceLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserSourceLink">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InformationCollectionModelsStoreContainer">
+          <EntitySet Name="Source" EntityType="Self.Source" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SourceContent" EntityType="Self.SourceContent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserSourceLink" EntityType="Self.UserSourceLink" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SourceContent_Source" Association="Self.FK_SourceContent_Source">
+            <End Role="Source" EntitySet="Source" />
+            <End Role="SourceContent" EntitySet="SourceContent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSourceLink_Source" Association="Self.FK_UserSourceLink_Source">
+            <End Role="Source" EntitySet="Source" />
+            <End Role="UserSourceLink" EntitySet="UserSourceLink" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSourceLink_UserProfile" Association="Self.FK_UserSourceLink_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="UserSourceLink" EntitySet="UserSourceLink" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="InformationCollection.Models" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityType Name="Source">
+          <Key>
+            <PropertyRef Name="SourceId" />
+          </Key>
+          <Property Name="SourceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SourceName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="UserSourceLinks" Relationship="Self.FK_UserSourceLink_Source" FromRole="Source" ToRole="UserSourceLink" />
+          <Property Name="Domain" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Interval" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SourceContents" Relationship="InformationCollection.Models.FK_SourceContent_Source" FromRole="Source" ToRole="SourceContent" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserSourceLinks" Relationship="Self.FK_UserSourceLink_UserProfile" FromRole="UserProfile" ToRole="UserSourceLink" />
+        </EntityType>
+        <EntityType Name="UserSourceLink">
+          <Key>
+            <PropertyRef Name="UserSourceLinkId" />
+          </Key>
+          <Property Name="UserSourceLinkId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SourceId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Source" Relationship="Self.FK_UserSourceLink_Source" FromRole="UserSourceLink" ToRole="Source" />
+          <NavigationProperty Name="UserProfile" Relationship="Self.FK_UserSourceLink_UserProfile" FromRole="UserSourceLink" ToRole="UserProfile" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <Association Name="FK_UserSourceLink_Source">
+          <End Role="Source" Type="Self.Source" Multiplicity="1" />
+          <End Role="UserSourceLink" Type="Self.UserSourceLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Source">
+              <PropertyRef Name="SourceId" />
+            </Principal>
+            <Dependent Role="UserSourceLink">
+              <PropertyRef Name="SourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSourceLink_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="UserSourceLink" Type="Self.UserSourceLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserSourceLink">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ICContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Sources" EntityType="Self.Source" />
+          <EntitySet Name="UserProfiles" EntityType="Self.UserProfile" />
+          <EntitySet Name="UserSourceLinks" EntityType="Self.UserSourceLink" />
+          <AssociationSet Name="FK_UserSourceLink_Source" Association="Self.FK_UserSourceLink_Source">
+            <End Role="Source" EntitySet="Sources" />
+            <End Role="UserSourceLink" EntitySet="UserSourceLinks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSourceLink_UserProfile" Association="Self.FK_UserSourceLink_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="UserSourceLink" EntitySet="UserSourceLinks" />
+          </AssociationSet>
+          <EntitySet Name="SourceContents" EntityType="InformationCollection.Models.SourceContent" />
+          <AssociationSet Name="FK_SourceContent_Source" Association="InformationCollection.Models.FK_SourceContent_Source">
+            <End Role="Source" EntitySet="Sources" />
+            <End Role="SourceContent" EntitySet="SourceContents" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="SourceContent">
+          <Key>
+            <PropertyRef Name="SourceContentId" />
+          </Key>
+          <Property Name="SourceId" Type="Int32" Nullable="false" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="ContentType" Type="Int32" Nullable="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Source" Relationship="InformationCollection.Models.FK_SourceContent_Source" FromRole="SourceContent" ToRole="Source" />
+          <Property Name="SourceContentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <Association Name="FK_SourceContent_Source">
+          <End Type="InformationCollection.Models.Source" Role="Source" Multiplicity="1" />
+          <End Type="InformationCollection.Models.SourceContent" Role="SourceContent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Source">
+              <PropertyRef Name="SourceId" />
+            </Principal>
+            <Dependent Role="SourceContent">
+              <PropertyRef Name="SourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="InformationCollectionModelsStoreContainer" CdmEntityContainer="ICContext">
+          <EntitySetMapping Name="Sources">
+            <EntityTypeMapping TypeName="InformationCollection.Models.Source">
+              <MappingFragment StoreEntitySet="Source">
+                <ScalarProperty Name="Interval" ColumnName="Interval" />
+                <ScalarProperty Name="Domain" ColumnName="Domain" />
+                <ScalarProperty Name="SourceId" ColumnName="SourceId" />
+                <ScalarProperty Name="SourceName" ColumnName="SourceName" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfiles">
+            <EntityTypeMapping TypeName="InformationCollection.Models.UserProfile">
+              <MappingFragment StoreEntitySet="UserProfile">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserSourceLinks">
+            <EntityTypeMapping TypeName="InformationCollection.Models.UserSourceLink">
+              <MappingFragment StoreEntitySet="UserSourceLink">
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="UserSourceLinkId" ColumnName="UserSourceLinkId" />
+                <ScalarProperty Name="SourceId" ColumnName="SourceId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SourceContents">
+            <EntityTypeMapping TypeName="InformationCollection.Models.SourceContent">
+              <MappingFragment StoreEntitySet="SourceContent">
+                <ScalarProperty Name="SourceContentId" ColumnName="SourceContentId" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="SourceId" ColumnName="SourceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

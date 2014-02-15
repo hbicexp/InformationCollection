@@ -7,10 +7,12 @@
     <ProjectGuid>{50CFF9EA-DF8F-4EE9-9697-9892544383D4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InformationCollection</RootNamespace>
+    <RootNamespace>TimiSoft.InformationCollection</RootNamespace>
     <AssemblyName>InformationCollection</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,8 +32,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,10 +52,69 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Models\ICContext.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ICContext.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ICContext.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ICContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ICContext.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ICContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Source.cs">
+      <DependentUpon>ICContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SourceContent.cs">
+      <DependentUpon>ICContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserProfile.cs">
+      <DependentUpon>ICContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DatabaseContext.cs" />
+    <Compile Include="Models\UserSource.cs" />
+    <Compile Include="Models\UserSourceLink.cs">
+      <DependentUpon>ICContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourceContentWatcher.cs" />
+    <Compile Include="SourceContentManager.cs" />
+    <Compile Include="SourceManager.cs" />
+    <Compile Include="UserManager.cs" />
+    <Compile Include="Utility\RequestHelper.cs" />
+    <Compile Include="Utility\UrlHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EntityDeploy Include="Models\ICContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ICContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Models\ICContext.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ICContext.edmx</DependentUpon>
+      <LastGenOutput>ICContext.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Models\ICContext.edmx.diagram">
+      <DependentUpon>ICContext.edmx</DependentUpon>
+    </None>
+    <None Include="Models\ICContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ICContext.edmx</DependentUpon>
+      <LastGenOutput>ICContext.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

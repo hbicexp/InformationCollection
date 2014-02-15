@@ -7,21 +7,27 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 
-namespace InformationCollectionService
+namespace TimiSoft.InformationCollectionService
 {
-    public partial class Service1 : ServiceBase
+    public partial class ICService : ServiceBase
     {
-        public Service1()
+        private InformationCollection.SourceContentWatcher watcher;
+
+        public ICService()
         {
             InitializeComponent();
         }
 
         protected override void OnStart(string[] args)
         {
+            this.watcher = new InformationCollection.SourceContentWatcher();
+            watcher.StartCollect();
         }
 
         protected override void OnStop()
         {
+            watcher.StopCollect();
         }
+
     }
 }

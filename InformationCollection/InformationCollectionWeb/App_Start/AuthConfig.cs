@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Web.WebPages.OAuth;
-using TimiSoft.Models;
+using TimiSoft.InformationCollectionWeb.Models;
 
-namespace TimiSoft
+namespace TimiSoft.InformationCollectionWeb
 {
     public static class AuthConfig
     {

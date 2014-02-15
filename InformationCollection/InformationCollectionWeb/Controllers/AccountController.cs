@@ -8,10 +8,11 @@ using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
-using TimiSoft.Filters;
-using TimiSoft.Models;
+using TimiSoft.InformationCollectionWeb.Filters;
+using TimiSoft.InformationCollectionWeb.Models;
+using TimiSoft.InformationCollection.Models;
 
-namespace TimiSoft.Controllers
+namespace TimiSoft.InformationCollectionWeb.Controllers
 {
     [Authorize]
     [InitializeSimpleMembership]
@@ -263,7 +264,7 @@ namespace TimiSoft.Controllers
             if (ModelState.IsValid)
             {
                 // 将新用户插入到数据库
-                using (UsersContext db = new UsersContext())
+                using (ICContext db = new ICContext())
                 {
                     UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
                     // 检查用户是否已存在

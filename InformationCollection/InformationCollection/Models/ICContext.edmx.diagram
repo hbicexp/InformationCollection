@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2166f018774f4491ab0419359a0896f6" Name="Diagram1">
+        <EntityTypeShape EntityType="InformationCollection.Models.Source" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InformationCollection.Models.UserProfile" Width="1.5" PointX="5.125" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="InformationCollection.Models.UserSourceLink" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <AssociationConnector Association="InformationCollection.Models.FK_UserSourceLink_Source" ManuallyRouted="false" />
+        <AssociationConnector Association="InformationCollection.Models.FK_UserSourceLink_UserProfile" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="InformationCollection.Models.SourceContent" Width="1.5" PointX="3" PointY="4.125" />
+        <AssociationConnector Association="InformationCollection.Models.FK_SourceContent_Source" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
