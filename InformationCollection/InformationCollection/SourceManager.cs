@@ -14,26 +14,27 @@ namespace TimiSoft.InformationCollection
 
         public static void AddSource(int userId, Models.UserSource userSource)
         {
-            if( string.IsNullOrEmpty(userSource.SourceName) || string.IsNullOrEmpty(userSource.Url)){
+            if (string.IsNullOrEmpty(userSource.SourceName) || string.IsNullOrEmpty(userSource.Url))
+            {
                 throw new ArgumentException("源名称和源地址不能为空！");
             }
 
-            if(!(userSource.Url.StartsWith("http://") || userSource.Url.StartsWith("https://") ))
+            if (!(userSource.Url.StartsWith("http://") || userSource.Url.StartsWith("https://")))
             {
                 userSource.Url = "http://" + userSource.Url;
             }
 
-            using( Models.ICContext context = new Models.ICContext())
+            using (Models.ICContext context = new Models.ICContext())
             {
-                var sourceInDB = context.Sources.Where(p=>p.Url == userSource.Url).FirstOrDefault();
+                var sourceInDB = context.Sources.Where(p => p.Url == userSource.Url).FirstOrDefault();
                 Models.UserSourceLink userSourceLinkInDB = null;
-                if( sourceInDB == null)
+                if (sourceInDB == null)
                 {
                     Models.Source source = new Models.Source()
                     {
                         SourceName = userSource.SourceName,
                         Url = userSource.Url,
-                        Domain = GetDomain(userSource.Url), 
+                        Domain = GetDomain(userSource.Url),
                         Interval = userSource.Interval,
                         AddTime = DateTime.Now,
                     };
@@ -45,6 +46,10 @@ namespace TimiSoft.InformationCollection
                         AddTime = DateTime.Now
                     });
                     context.Sources.Add(source);
+                    context.SaveChanges();
+
+                    // collect system info
+                    SourceContentManager.Collect(source, DateTime.Now, SourceContentType.System);
                 }
                 else
                 {
@@ -53,14 +58,14 @@ namespace TimiSoft.InformationCollection
                     {
                         sourceInDB.UserSourceLinks.Add(new Models.UserSourceLink()
                         {
-                            Source = sourceInDB, 
-                             UserId = userId, 
-                             AddTime = DateTime.Now
+                            Source = sourceInDB,
+                            UserId = userId,
+                            AddTime = DateTime.Now
                         });
                     }
-                }
 
-                context.SaveChanges();
+                    context.SaveChanges();
+                }
             }
         }
 
@@ -79,7 +84,7 @@ namespace TimiSoft.InformationCollection
 
         public static List<Models.UserSource> GetSourceList(int userId)
         {
-            using( Models.ICContext context = new Models.ICContext())
+            using (Models.ICContext context = new Models.ICContext())
             {
                 return (from p in context.Sources
                         join q in context.UserSourceLinks
@@ -88,19 +93,18 @@ namespace TimiSoft.InformationCollection
                         select new Models.UserSource
                         {
                             SourceId = p.SourceId,
-                             SourceName = p.SourceName,
-                             Url = p.Url,
-                             AddTime = q.AddTime
+                            SourceName = p.SourceName,
+                            Url = p.Url,
+                            AddTime = q.AddTime
                         }).ToList();
             }
         }
-
 
         public static Models.Source GetSource(int id)
         {
             using (Models.ICContext context = new Models.ICContext())
             {
-                return  context.Sources.Find(id);
+                return context.Sources.Find(id);
             }
         }
     }

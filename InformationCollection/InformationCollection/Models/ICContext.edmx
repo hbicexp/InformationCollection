@@ -27,12 +27,29 @@
           <Property Name="Url" Type="varchar" MaxLength="5000" Nullable="false" />
           <Property Name="AddTime" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="SourceRegex">
+          <Key>
+            <PropertyRef Name="SourceRegexId" />
+          </Key>
+          <Property Name="SourceRegexId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Regex" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsMatched" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="UserProfile">
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
           <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="UserSourceContentLink">
+          <Key>
+            <PropertyRef Name="UserSourceContentLinkId" />
+          </Key>
+          <Property Name="UserSourceContentLinkId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="SourceContentId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserSourceLink">
           <Key>
@@ -52,6 +69,30 @@
             </Principal>
             <Dependent Role="SourceContent">
               <PropertyRef Name="SourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSourceContentLink_SourceContent">
+          <End Role="SourceContent" Type="Self.SourceContent" Multiplicity="1" />
+          <End Role="UserSourceContentLink" Type="Self.UserSourceContentLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SourceContent">
+              <PropertyRef Name="SourceContentId" />
+            </Principal>
+            <Dependent Role="UserSourceContentLink">
+              <PropertyRef Name="SourceContentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSourceContentLink_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="UserSourceContentLink" Type="Self.UserSourceContentLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserSourceContentLink">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -82,11 +123,21 @@
         <EntityContainer Name="InformationCollectionModelsStoreContainer">
           <EntitySet Name="Source" EntityType="Self.Source" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SourceContent" EntityType="Self.SourceContent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SourceRegex" EntityType="Self.SourceRegex" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserSourceContentLink" EntityType="Self.UserSourceContentLink" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserSourceLink" EntityType="Self.UserSourceLink" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_SourceContent_Source" Association="Self.FK_SourceContent_Source">
             <End Role="Source" EntitySet="Source" />
             <End Role="SourceContent" EntitySet="SourceContent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSourceContentLink_SourceContent" Association="Self.FK_UserSourceContentLink_SourceContent">
+            <End Role="SourceContent" EntitySet="SourceContent" />
+            <End Role="UserSourceContentLink" EntitySet="UserSourceContentLink" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSourceContentLink_UserProfile" Association="Self.FK_UserSourceContentLink_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="UserSourceContentLink" EntitySet="UserSourceContentLink" />
           </AssociationSet>
           <AssociationSet Name="FK_UserSourceLink_Source" Association="Self.FK_UserSourceLink_Source">
             <End Role="Source" EntitySet="Source" />
@@ -121,6 +172,7 @@
           <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="UserSourceLinks" Relationship="Self.FK_UserSourceLink_UserProfile" FromRole="UserProfile" ToRole="UserSourceLink" />
+          <NavigationProperty Name="UserSourceContentLinks" Relationship="InformationCollection.Models.FK_UserSourceContentLink_UserProfile" FromRole="UserProfile" ToRole="UserSourceContentLink" />
         </EntityType>
         <EntityType Name="UserSourceLink">
           <Key>
@@ -174,6 +226,16 @@
             <End Role="Source" EntitySet="Sources" />
             <End Role="SourceContent" EntitySet="SourceContents" />
           </AssociationSet>
+          <EntitySet Name="SourceRegexes" EntityType="InformationCollection.Models.SourceRegex" />
+          <EntitySet Name="UserSourceContentLinks" EntityType="InformationCollection.Models.UserSourceContentLink" />
+          <AssociationSet Name="FK_UserSourceContentLink_SourceContent" Association="InformationCollection.Models.FK_UserSourceContentLink_SourceContent">
+            <End Role="SourceContent" EntitySet="SourceContents" />
+            <End Role="UserSourceContentLink" EntitySet="UserSourceContentLinks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSourceContentLink_UserProfile" Association="InformationCollection.Models.FK_UserSourceContentLink_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="UserSourceContentLink" EntitySet="UserSourceContentLinks" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="SourceContent">
           <Key>
@@ -186,6 +248,7 @@
           <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Source" Relationship="InformationCollection.Models.FK_SourceContent_Source" FromRole="SourceContent" ToRole="Source" />
           <Property Name="SourceContentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="UserSourceContentLinks" Relationship="InformationCollection.Models.FK_UserSourceContentLink_SourceContent" FromRole="SourceContent" ToRole="UserSourceContentLink" />
         </EntityType>
         <Association Name="FK_SourceContent_Source">
           <End Type="InformationCollection.Models.Source" Role="Source" Multiplicity="1" />
@@ -196,6 +259,49 @@
             </Principal>
             <Dependent Role="SourceContent">
               <PropertyRef Name="SourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SourceRegex">
+          <Key>
+            <PropertyRef Name="SourceRegexId" />
+          </Key>
+          <Property Name="SourceRegexId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Regex" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsMatched" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserSourceContentLink">
+          <Key>
+            <PropertyRef Name="UserSourceContentLinkId" />
+          </Key>
+          <Property Name="UserSourceContentLinkId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="SourceContentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SourceContent" Relationship="InformationCollection.Models.FK_UserSourceContentLink_SourceContent" FromRole="UserSourceContentLink" ToRole="SourceContent" />
+          <NavigationProperty Name="UserProfile" Relationship="InformationCollection.Models.FK_UserSourceContentLink_UserProfile" FromRole="UserSourceContentLink" ToRole="UserProfile" />
+        </EntityType>
+        <Association Name="FK_UserSourceContentLink_SourceContent">
+          <End Type="InformationCollection.Models.SourceContent" Role="SourceContent" Multiplicity="1" />
+          <End Type="InformationCollection.Models.UserSourceContentLink" Role="UserSourceContentLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SourceContent">
+              <PropertyRef Name="SourceContentId" />
+            </Principal>
+            <Dependent Role="UserSourceContentLink">
+              <PropertyRef Name="SourceContentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSourceContentLink_UserProfile">
+          <End Type="InformationCollection.Models.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="InformationCollection.Models.UserSourceContentLink" Role="UserSourceContentLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserSourceContentLink">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -244,6 +350,25 @@
                 <ScalarProperty Name="ContentType" ColumnName="ContentType" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="SourceId" ColumnName="SourceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SourceRegexes">
+            <EntityTypeMapping TypeName="InformationCollection.Models.SourceRegex">
+              <MappingFragment StoreEntitySet="SourceRegex">
+                <ScalarProperty Name="IsMatched" ColumnName="IsMatched" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Regex" ColumnName="Regex" />
+                <ScalarProperty Name="SourceRegexId" ColumnName="SourceRegexId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserSourceContentLinks">
+            <EntityTypeMapping TypeName="InformationCollection.Models.UserSourceContentLink">
+              <MappingFragment StoreEntitySet="UserSourceContentLink">
+                <ScalarProperty Name="SourceContentId" ColumnName="SourceContentId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserSourceContentLinkId" ColumnName="UserSourceContentLinkId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

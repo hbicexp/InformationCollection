@@ -1,13 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-
+﻿// -----------------------------------------------------------------------
+// <copyright file="SourceContentWatcher.cs" company="TimiSoft">
+// Copyright TimiSoft. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 namespace TimiSoft.InformationCollection
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading;
+
+    /// <summary>
+    /// Source content watcher class
+    /// </summary>
     public class SourceContentWatcher
     {
+        /// <summary>
+        /// log writer
+        /// </summary>
+        private log4net.ILog log = log4net.LogManager.GetLogger(typeof(SourceContentWatcher));
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SourceContentWatcher" /> class.
+        /// </summary>
+        public SourceContentWatcher()
+        {
+            this.WatchedSources = new List<Models.Source>();
+        }
+
         /// <summary>
         /// Gets or sets thread state
         /// </summary>
@@ -17,19 +38,6 @@ namespace TimiSoft.InformationCollection
         /// Gets watched sources
         /// </summary>
         public List<Models.Source> WatchedSources { get; private set; }
-
-        /// <summary>
-        /// log writer
-        /// </summary>
-        private log4net.ILog log = log4net.LogManager.GetLogger(typeof(SourceContentWatcher));
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public SourceContentWatcher()
-        {
-            this.WatchedSources = new List<Models.Source>();
-        }
 
         /// <summary>
         /// Start to collect informations
@@ -82,18 +90,22 @@ namespace TimiSoft.InformationCollection
         /// <summary>
         /// Collect informations
         /// </summary>
-        /// <param name="collectTime">collect</param>
+        /// <param name="collectTime">collect time</param>
         private void Collect(DateTime collectTime)
         {
             try
             {
-                this.GetWatchedSources();
+                var watchedSources = this.GetWatchedSources();
+                foreach (var source in watchedSources)
+                {
+                    this.log.Info("Collect info for " + source.Url);
+                    SourceContentManager.Collect(source, collectTime, SourceContentType.Content);
+                }
 
+                this.WatchedSources.AddRange(watchedSources);
                 for (int i = this.WatchedSources.Count - 1; i >= 0; i--)
                 {
                     var source = this.WatchedSources[i];
-                    SourceContentManager.Collect(source, collectTime, SourceContentType.Content);
-
                     if (source.Interval == 1)
                     {
                         this.WatchedSources.RemoveAt(i);
@@ -110,17 +122,19 @@ namespace TimiSoft.InformationCollection
             }
         }
 
-        private void GetWatchedSources()
+        /// <summary>
+        /// Get watched sources
+        /// </summary>
+        private IList<Models.Source> GetWatchedSources()
         {
             using (Models.ICContext context = new Models.ICContext())
             {
-                var addSourceList = (from p in context.Sources
+                return (from p in context.Sources.Where(p => p.Interval > 0).ToList()
                                      join q in this.WatchedSources
                                      on p.SourceId equals q.SourceId into watchedSourcesDefault
                                      from r in watchedSourcesDefault.DefaultIfEmpty()
                                      where r == null
                                      select p).ToList();
-                this.WatchedSources.AddRange(addSourceList);
             }
         }
     }

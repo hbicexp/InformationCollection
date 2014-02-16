@@ -14,6 +14,11 @@ namespace TimiSoft.InformationCollection.Models
     
     public partial class SourceContent
     {
+        public SourceContent()
+        {
+            this.UserSourceContentLinks = new HashSet<UserSourceContentLink>();
+        }
+    
         public int SourceId { get; set; }
         public string Content { get; set; }
         public int ContentType { get; set; }
@@ -22,5 +27,6 @@ namespace TimiSoft.InformationCollection.Models
         public int SourceContentId { get; set; }
     
         public virtual Source Source { get; set; }
+        public virtual ICollection<UserSourceContentLink> UserSourceContentLinks { get; set; }
     }
 }

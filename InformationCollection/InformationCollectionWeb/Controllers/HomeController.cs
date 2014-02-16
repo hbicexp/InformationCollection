@@ -11,10 +11,77 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
     [Authorize]
     public class HomeController : Controller
     {
+        private UserProfile userProfile;
+
+        protected override void OnAuthorization(AuthorizationContext filterContext)
+        {
+            base.OnAuthorization(filterContext);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                this.userProfile = this.GetUser(User.Identity.Name);
+                ViewBag.Sources = this.GetSources();
+            }
+        }
+
         public ActionResult Index()
         {
-            ViewBag.Message = "修改此模板以快速启动你的 ASP.NET MVC 应用程序。";
+            var p = Request["page"];
+            int page = 0;
+            int pageSize = 20;
+            if (p != null) { int.TryParse(p, out page); }
+            if (page == 0) { page = 1; }
+            int count = 0;
+            var search = Request["search"];
 
+            ViewBag.Selected = "Index";
+            ViewBag.SourceContents = InformationCollection.SourceContentManager.GetUserContents(this.userProfile.UserId, search, page, pageSize, out count);
+            ViewBag.PageCount = 1 + (count - 1) / pageSize;
+            ViewBag.PageIndex = page;
+            return View();
+        }
+
+        public ActionResult Favor()
+        {
+            var p = Request["page"];
+            int page = 0;
+            int pageSize = 20;
+            if (p != null) { int.TryParse(p, out page); }
+            if (page == 0) { page = 1; }
+            int count = 0;
+            var search = Request["search"];
+
+            ViewBag.Title = "关注信息";
+            ViewBag.Selected = "Favor";
+
+            ViewBag.SourceContents = InformationCollection.SourceContentManager.GetUserFavorContents(this.userProfile.UserId, search, page, pageSize, out count);
+            ViewBag.PageCount = 1 + (count - 1) / pageSize;
+            ViewBag.PageIndex = page;
+            return View();
+        }
+
+        public ActionResult Content(int id)
+        {
+            var source = InformationCollection.SourceManager.GetSource(id);
+            if (source == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var p = Request["page"];
+            int page = 0;
+            int pageSize = 20;
+            if (p != null) { int.TryParse(p, out page); }
+            if (page == 0) { page = 1; }
+            int count = 0;
+            var search = Request["search"];
+
+            ViewBag.Title = "所有信息";
+            ViewBag.Selected = source.SourceName;
+
+            ViewBag.SourceContents = InformationCollection.SourceContentManager.GetUserContents(this.userProfile.UserId, search, id, page, pageSize, out count);
+            ViewBag.PageCount = 1 + (count - 1) / pageSize;
+            ViewBag.PageIndex = page;
             return View();
         }
 
@@ -35,16 +102,29 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
         public ActionResult Source()
         {
             ViewBag.Message = "源管理";
-            UserProfile userProfile = this.GetUser(User.Identity.Name);
-            var model = SourceManager.GetSourceList(userProfile.UserId);
+            ViewBag.Selected = "Source";
+            var model = SourceManager.GetSourceList(this.userProfile.UserId);
             return View(model);
         }
 
         public ActionResult AddSource(UserSource model)
         {
-            UserProfile userProfile = this.GetUser(User.Identity.Name);
-            SourceManager.AddSource(userProfile.UserId, model);
+            SourceManager.AddSource(this.userProfile.UserId, model);
             return RedirectToAction("Source", "Home");
+        }
+
+        [HttpGet]
+        public JsonResult AddFavor(int id)
+        {
+            UserSourceContentLinkManager.AddLink(this.userProfile.UserId, id);
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult RemoveFavor(int id)
+        {
+            UserSourceContentLinkManager.RemoveLink(this.userProfile.UserId, id);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         private UserProfile GetUser(string userName)
@@ -62,6 +142,23 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
             }
 
             return userProfile;
+        }
+
+        private List<UserSource> GetSources()
+        {
+            var userSources = Session["UserSources"] as List<UserSource>;
+            if (userSources == null)
+            {
+                userSources = SourceManager.GetSourceList(this.userProfile.UserId);
+                if (userSources == null)
+                {
+                    userSources = new List<UserSource>();
+                }
+
+                Session["UserSources"] = userSources;
+            }
+
+            return userSources;
         }
     }
 }

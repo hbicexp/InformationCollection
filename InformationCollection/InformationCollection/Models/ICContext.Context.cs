@@ -29,5 +29,7 @@ namespace TimiSoft.InformationCollection.Models
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<UserSourceLink> UserSourceLinks { get; set; }
         public DbSet<SourceContent> SourceContents { get; set; }
+        public DbSet<SourceRegex> SourceRegexes { get; set; }
+        public DbSet<UserSourceContentLink> UserSourceContentLinks { get; set; }
     }
 }

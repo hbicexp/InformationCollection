@@ -73,11 +73,18 @@
     <Compile Include="Models\SourceContent.cs">
       <DependentUpon>ICContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SourceRegex.cs">
+      <DependentUpon>ICContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserProfile.cs">
       <DependentUpon>ICContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DatabaseContext.cs" />
     <Compile Include="Models\UserSource.cs" />
+    <Compile Include="Models\UserSourceContent.cs" />
+    <Compile Include="Models\UserSourceContentLink.cs">
+      <DependentUpon>ICContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserSourceLink.cs">
       <DependentUpon>ICContext.tt</DependentUpon>
     </Compile>
@@ -86,6 +93,7 @@
     <Compile Include="SourceContentManager.cs" />
     <Compile Include="SourceManager.cs" />
     <Compile Include="UserManager.cs" />
+    <Compile Include="UserSourceContentLinkManager.cs" />
     <Compile Include="Utility\RequestHelper.cs" />
     <Compile Include="Utility\UrlHelper.cs" />
   </ItemGroup>

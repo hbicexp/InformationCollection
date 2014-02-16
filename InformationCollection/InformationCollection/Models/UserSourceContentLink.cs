@@ -12,18 +12,13 @@ namespace TimiSoft.InformationCollection.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserProfile
+    public partial class UserSourceContentLink
     {
-        public UserProfile()
-        {
-            this.UserSourceLinks = new HashSet<UserSourceLink>();
-            this.UserSourceContentLinks = new HashSet<UserSourceContentLink>();
-        }
-    
+        public int UserSourceContentLinkId { get; set; }
         public int UserId { get; set; }
-        public string UserName { get; set; }
+        public int SourceContentId { get; set; }
     
-        public virtual ICollection<UserSourceLink> UserSourceLinks { get; set; }
-        public virtual ICollection<UserSourceContentLink> UserSourceContentLinks { get; set; }
+        public virtual SourceContent SourceContent { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
     }
 }

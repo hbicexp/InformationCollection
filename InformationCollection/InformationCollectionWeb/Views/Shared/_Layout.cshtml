@@ -6,17 +6,20 @@
     <title>@ViewBag.Title - 信息采集系统</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
     <script src="~/Scripts/jquery-1.7.1.min.js"></script>
     <script src="~/Scripts/jquery-ui-1.10.4.custom.min.js"></script>
-    @RenderSection("scripts", required: false)
     <link href="~/Content/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("scripts", required: false)
     <link href="~/Content/table.css" rel="stylesheet" />
 </head>
 <body>
-    <header class="featured">
-        <div class="content-wrapper">
+    <header>
+        <div class="content">
+            <div class="float-left">
+                <img src="~/Images/logo.png" />
+            </div>
             <div class="float-left">
                 <p class="site-title">@Html.ActionLink("信息采集系统", "Index", "Home")</p>
             </div>
@@ -39,18 +42,19 @@
         </div>
     </header>
     <div id="body">
-        @RenderSection("featured", required: false)
-        <section class="content-wrapper main-content clear-fix">
-            @RenderBody()
-        </section>
+        <div class="content">
+            @RenderSection("featured", required: false)
+            <section class="content main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
     </div>
     <footer>
-        <div class="content-wrapper">
+        <div class="content">
             <div class="float-left">
                 <p>&copy; @DateTime.Now.Year - 信息采集系统</p>
             </div>
         </div>
     </footer>
-
 </body>
 </html>

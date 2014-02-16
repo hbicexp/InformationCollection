@@ -12,18 +12,11 @@ namespace TimiSoft.InformationCollection.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserProfile
+    public partial class SourceRegex
     {
-        public UserProfile()
-        {
-            this.UserSourceLinks = new HashSet<UserSourceLink>();
-            this.UserSourceContentLinks = new HashSet<UserSourceContentLink>();
-        }
-    
-        public int UserId { get; set; }
-        public string UserName { get; set; }
-    
-        public virtual ICollection<UserSourceLink> UserSourceLinks { get; set; }
-        public virtual ICollection<UserSourceContentLink> UserSourceContentLinks { get; set; }
+        public int SourceRegexId { get; set; }
+        public string Regex { get; set; }
+        public string Name { get; set; }
+        public bool IsMatched { get; set; }
     }
 }

@@ -12,6 +12,10 @@
         <AssociationConnector Association="InformationCollection.Models.FK_UserSourceLink_UserProfile" ManuallyRouted="false" />
         <EntityTypeShape EntityType="InformationCollection.Models.SourceContent" Width="1.5" PointX="3" PointY="4.125" />
         <AssociationConnector Association="InformationCollection.Models.FK_SourceContent_Source" />
+        <EntityTypeShape EntityType="InformationCollection.Models.SourceRegex" Width="1.5" PointX="5.375" PointY="5.75" />
+        <EntityTypeShape EntityType="InformationCollection.Models.UserSourceContentLink" Width="1.5" PointX="7.375" PointY="2.75" />
+        <AssociationConnector Association="InformationCollection.Models.FK_UserSourceContentLink_SourceContent" />
+        <AssociationConnector Association="InformationCollection.Models.FK_UserSourceContentLink_UserProfile" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
