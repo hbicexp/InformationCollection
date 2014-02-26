@@ -18,7 +18,7 @@ namespace TimiSoft.InformationCollection.Models
         public int UserId { get; set; }
         public int SourceContentId { get; set; }
     
-        public virtual SourceContent SourceContent { get; set; }
         public virtual UserProfile UserProfile { get; set; }
+        public virtual SourceContent SourceContent { get; set; }
     }
 }

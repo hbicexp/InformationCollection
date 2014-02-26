@@ -1,9 +1,10 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section Scripts {<script src="~/Scripts/page.js"></script>}
-
-<div class="float-left source">
+@section Scripts {
+    <script src="~/Scripts/page.js"></script>
+}
+<section class="float-left source">
     <hgroup class="title">
         <h3>@ViewBag.Title</h3>
     </hgroup>
@@ -11,19 +12,23 @@
         @{
             var cssClass = new { @class = "selected" };
         }
-        <li>@Html.ActionLink("最新", "Index", "Home", ViewBag.Selected == "Index" ? cssClass : null)</li>
-        <li>@Html.ActionLink("关注", "Favor", "Home", ViewBag.Selected == "Favor" ? cssClass : null)</li>
-        <li>@Html.ActionLink("源管理", "Source", "Home", ViewBag.Selected == "Source" ? cssClass : null)</li>
+        <li>@Html.ActionLink("最新", "Index", "Home", null, new { @class = (ViewBag.Selected == "Index" ? "refresh selected" : "refresh") })</li>
+        <li>@Html.ActionLink("关注", "Favor", "Home", null, new { @class = (ViewBag.Selected == "Favor" ? "star selected" : "star") })</li>
+        <li>@Html.ActionLink("源管理 + ", "Source", "Home", null, new { @class = (ViewBag.Selected == "Source" ? "list selected" : "list") })</li>
         @if (ViewBag.Sources != null)
         {
             foreach (TimiSoft.InformationCollection.Models.UserSource source in ViewBag.Sources)
             {
-                <li>@Html.ActionLink((source.SourceName.Length > 10 ? source.SourceName.Substring(0, 10) : source.SourceName), "Content", "Home", new { Id = source.SourceId }, ViewBag.Selected == source.SourceName ? cssClass : null)</li>
+                <li>@Html.ActionLink((source.SourceName.Length > 10 ? source.SourceName.Substring(0, 9) + ".." : source.SourceName), "Content", "Home", new { Id = source.SourceId }, new { @class = (ViewBag.Selected == source.SourceName ? "tag selected" : "tag") })</li>
             }
         }
+        @if (User.IsInRole("Administrator"))
+        {
+            <li><a href="/Admin/" class="cogwheel">系统管理</a></li>
+            <li>@Html.ActionLink("所有信息", "All", "Home", null, new { @class = (ViewBag.Selected == "All" ? "cogwheel selected" : "cogwheel") })</li>
+        }
     </ul>
-</div>
-
-<div class="float-left sourcecontent">
+</section>
+<section class="float-left sourcecontent">
     @RenderBody()
-</div>
+</section>

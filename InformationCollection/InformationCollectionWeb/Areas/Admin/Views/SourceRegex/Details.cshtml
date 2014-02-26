@@ -1,0 +1,44 @@
+﻿@model TimiSoft.InformationCollection.Models.SourceRegex
+
+@{
+    Layout = "../Shared/_Content.cshtml";
+}
+
+<p class="title">规则管理 &nbsp;&nbsp;&nbsp;&nbsp;@Html.ActionLink("新增", "Create", null, new { @class = "btn", style = "font-size:14px" })</p>
+<h2>Details</h2>
+
+<fieldset>
+    <legend>SourceRegex</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Regex)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Regex)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsMatched)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsMatched)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.RegexType)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RegexType)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.SourceRegexId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -6,47 +6,32 @@
     <title>@ViewBag.Title - 信息采集系统</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
+    @RenderSection("css", required: false)
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.7.1.min.js"></script>
     <script src="~/Scripts/jquery-ui-1.10.4.custom.min.js"></script>
-    <link href="~/Content/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
     @RenderSection("scripts", required: false)
-    <link href="~/Content/table.css" rel="stylesheet" />
 </head>
 <body>
     <header>
         <div class="content">
             <div class="float-left">
-                <img src="~/Images/logo.png" />
+                <img src="~/Images/logo.jpg" />
             </div>
             <div class="float-left">
-                <p class="site-title">@Html.ActionLink("信息采集系统", "Index", "Home")</p>
+                <p class="site-title"><a href="/">信息采集系统</a></p>
             </div>
             <div class="float-right">
                 <section id="login">
                     @Html.Partial("_LoginPartial")
                 </section>
-                @if (Request.IsAuthenticated)
-                {
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("最新", "Index", "Home")</li>
-                            <li>@Html.ActionLink("关注", "About", "Home")</li>
-                            <li>@Html.ActionLink("源管理", "Source", "Home")</li>
-                        </ul>
-                    </nav>
-                }
             </div>
-            <div style="height:0px; clear:both;"></div>
         </div>
     </header>
     <div id="body">
-        <div class="content">
-            @RenderSection("featured", required: false)
-            <section class="content main-content clear-fix">
-                @RenderBody()
-            </section>
+        <div class="content clear-fix">  
+            @RenderBody()
         </div>
     </div>
     <footer>

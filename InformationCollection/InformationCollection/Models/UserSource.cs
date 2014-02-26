@@ -14,7 +14,7 @@ namespace TimiSoft.InformationCollection.Models
     {
         [Display(Name = "编号")]
         public int SourceId { get; set; }
-
+        
         [Required]
         [Display(Name = "源名称")]
         public string SourceName { get; set; }
@@ -24,7 +24,7 @@ namespace TimiSoft.InformationCollection.Models
         public string Url { get; set; }
 
         [Display(Name = "添加时间")]
-        public DateTime AddTime { get; set; }
+        public DateTime CreateTime { get; set; }
 
         [Required]
         [Display(Name = "频率")]

@@ -22,10 +22,10 @@ namespace TimiSoft.InformationCollection.Models
     
         public int SourceId { get; set; }
         public string SourceName { get; set; }
-        public string Url { get; set; }
-        public System.DateTime AddTime { get; set; }
         public string Domain { get; set; }
+        public string Url { get; set; }
         public int Interval { get; set; }
+        public System.DateTime CreateTime { get; set; }
     
         public virtual ICollection<UserSourceLink> UserSourceLinks { get; set; }
         public virtual ICollection<SourceContent> SourceContents { get; set; }

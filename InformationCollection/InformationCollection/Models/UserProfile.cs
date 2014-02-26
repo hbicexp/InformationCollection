@@ -16,14 +16,14 @@ namespace TimiSoft.InformationCollection.Models
     {
         public UserProfile()
         {
-            this.UserSourceLinks = new HashSet<UserSourceLink>();
             this.UserSourceContentLinks = new HashSet<UserSourceContentLink>();
+            this.UserSourceLinks = new HashSet<UserSourceLink>();
         }
     
         public int UserId { get; set; }
         public string UserName { get; set; }
     
-        public virtual ICollection<UserSourceLink> UserSourceLinks { get; set; }
         public virtual ICollection<UserSourceContentLink> UserSourceContentLinks { get; set; }
+        public virtual ICollection<UserSourceLink> UserSourceLinks { get; set; }
     }
 }

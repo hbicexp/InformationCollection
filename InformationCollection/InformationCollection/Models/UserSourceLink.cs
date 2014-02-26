@@ -16,8 +16,11 @@ namespace TimiSoft.InformationCollection.Models
     {
         public int UserSourceLinkId { get; set; }
         public int SourceId { get; set; }
+        public string SourceName { get; set; }
         public int UserId { get; set; }
-        public System.DateTime AddTime { get; set; }
+        public int Interval { get; set; }
+        public System.DateTime CreateTime { get; set; }
+        public Nullable<System.DateTime> UpdateTime { get; set; }
     
         public virtual Source Source { get; set; }
         public virtual UserProfile UserProfile { get; set; }

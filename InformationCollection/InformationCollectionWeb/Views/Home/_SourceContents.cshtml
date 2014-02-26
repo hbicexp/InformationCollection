@@ -1,10 +1,10 @@
 ﻿@model List<TimiSoft.InformationCollection.Models.UserSourceContent>
 @using (Html.BeginForm())
 {
-    <div>
-        @Html.TextBox("search", "", new { @class = "search" })
-        <button class="btn btn-large btn-primary" type="submit">搜索</button>
+    <div class="search">
+        @Html.TextBox("search", Request["search"], new { id = "Search" })@Html.TextBox("begindate", Request["BeginDate"], new { id = "BeginDate" })@Html.TextBox("enddate", Request["EndDate"], new { id = "EndDate" })<button class="btn" type="submit">搜索</button>
     </div>
+    
     if (Model == null || Model.Count == 0)
     {
         <p>暂时没有新的信息！</p>
@@ -12,16 +12,20 @@
     else
     {
         string source = string.Empty;
-        for (var i = 0; i < Model.Count; i++)
+        bool alt = false;
+        var cssLine = "";
+        for (var i = 0; i < Model.Count; i++, alt = !alt)
         {
             var sourceContent = Model[i];
             if (sourceContent.Source != source)
             {
                 source = sourceContent.Source;
-                <p class="title">@source &nbsp;&nbsp;&nbsp;&nbsp;<font style="font-size:14px">[@sourceContent.AddTime.ToString("yyyy-MM-dd HH:00")]</font></p>
+                <p class="title">@source &nbsp;&nbsp;&nbsp;&nbsp;<font style="font-size:14px">[@sourceContent.AddTime.ToString("yyyy-MM-dd") @sourceContent.AddHours.ToString("00"):00]</font></p>
             }
 
-            <p class="line">
+            cssLine = alt ? "line alt" : "line";
+
+            <div class="@cssLine">
                 @if (sourceContent.IsFavor)
                 {
                     <a class="flag favor" title="关注" onclick="SetFavor(this, @sourceContent.SourceContentId)">&nbsp;</a>
@@ -30,34 +34,32 @@
                 {
                     <a class="flag" title="关注" onclick="SetFavor(this, @sourceContent.SourceContentId)">&nbsp;</a>
                 }
-                <a href="@sourceContent.Url" target="_blank">@(sourceContent.Content.Length > 55 ? sourceContent.Content.Substring(0, 52) + "..." : sourceContent.Content)</a>&nbsp;
-            </p>
+                <a href="@sourceContent.Url" target="_blank">@(sourceContent.Content.Length > 40 ? sourceContent.Content.Substring(0, 37) + "..." : sourceContent.Content)</a>&nbsp;
+                <div class="float-right">@sourceContent.SourceDate.ToString("yyyy-MM-dd")</div>
+            </div>
         }
-    }
 
-    <div id="PagePlaceHolder">
-        @{
-    string pageCount = ViewBag.PageCount == null ? "1" : ViewBag.PageCount.ToString();
-    string pageIndex = ViewBag.PageIndex == null ? "1" : ViewBag.PageIndex.ToString();
-        }
-        @Html.Hidden("count", pageCount)
-        @Html.Hidden("page", pageIndex)
-        <script type="text/javascript" language="javascript">
-
-            function gotoPage(num) {
-                $("#page").val(num);
-                //window.alert(window.location);
-                $("Form").submit();
+        <div id="PagePlaceHolder">
+            @{
+        string pageCount = ViewBag.PageCount == null ? "1" : ViewBag.PageCount.ToString();
+        string pageIndex = ViewBag.PageIndex == null ? "1" : ViewBag.PageIndex.ToString();
             }
-            var pg = new showPages('pg');
-            pg.pageCount = ~~$("#count").val();
-            pg.page = ~~$("#page").val();
-            pg.callbackFunc = gotoPage;
-            pg.printHtml(1);
-        </script>
-    </div>
-}
+            @Html.Hidden("count", pageCount)
+            @Html.Hidden("page", pageIndex)
+            <script type="text/javascript" language="javascript">
 
+                function gotoPage(num) {
+                    $("#page").val(num);
+                    $("Form").submit();
+                }
+                var pg = new showPages('pg');
+                pg.pageCount = ~~$("#count").val();
+                pg.page = ~~$("#page").val();
+                pg.callbackFunc = gotoPage;
+                pg.printHtml(1);
+            </script>
+        </div>
+    
 <script type="text/javascript" language="javascript">
     function SetFavor(l, id) {
         var link = $(l);
@@ -90,4 +92,14 @@
             });
         }
     }
+</script>
+
+    }
+}
+
+<script type="text/javascript" language="javascript">
+    $(function () {
+        $("#BeginDate").datepicker();
+        $("#EndDate").datepicker();
+    });
 </script>

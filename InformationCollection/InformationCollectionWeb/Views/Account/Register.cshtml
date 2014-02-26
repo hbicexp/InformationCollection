@@ -6,8 +6,8 @@
 
     <hgroup class="title">
         <h1>@ViewBag.Title.</h1>
-        <h2>创建新帐户。</h2>
     </hgroup>
+    <h3 class="form-signin-heading">创建新帐户。</h3>
 
     @using (Html.BeginForm())
     {
@@ -34,6 +34,11 @@
         </fieldset>
     }
 </section>
+
+<section class="social" id="socialLoginForm">
+    <h3>欢迎注册信息采集系统。</h3>
+</section>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

@@ -15,5 +15,10 @@ namespace TimiSoft.InformationCollection.Models
         public int SourceContentId { get; set; }
         public string Source { get; set; }
         public bool IsFavor { get; set; }
+        public DateTime SourceDate { get; set; }
+
+        public int AddHours { get; set; }
+
+        public DateTime AddDate { get; set; }
     }
 }

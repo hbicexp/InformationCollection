@@ -19,12 +19,15 @@ namespace TimiSoft.InformationCollection.Models
             this.UserSourceContentLinks = new HashSet<UserSourceContentLink>();
         }
     
+        public int SourceContentId { get; set; }
         public int SourceId { get; set; }
         public string Content { get; set; }
         public int ContentType { get; set; }
         public string Url { get; set; }
         public System.DateTime AddTime { get; set; }
-        public int SourceContentId { get; set; }
+        public System.DateTime AddDate { get; set; }
+        public int AddHour { get; set; }
+        public System.DateTime SourceDate { get; set; }
     
         public virtual Source Source { get; set; }
         public virtual ICollection<UserSourceContentLink> UserSourceContentLinks { get; set; }

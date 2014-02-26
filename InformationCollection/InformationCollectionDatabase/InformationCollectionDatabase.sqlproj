@@ -65,15 +65,16 @@
     <Build Include="dbo\Tables\webpages_OAuthMembership.sql" />
     <Build Include="dbo\Tables\webpages_Membership.sql" />
     <Build Include="dbo\Tables\UserProfile.sql" />
-    <Build Include="dbo\Tables\Source.sql" />
-    <Build Include="dbo\Tables\UserSourceLink.sql" />
     <Build Include="dbo\Tables\SourceContent.sql" />
     <Build Include="dbo\Tables\UserSourceContentLink.sql" />
     <Build Include="dbo\Tables\SourceRegex.sql" />
+    <Build Include="dbo\Tables\Source.sql" />
+    <Build Include="dbo\Tables\UserSourceLink.sql" />
+    <Build Include="dbo\Tables\SourceRegexGroup.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="InformationCollectionDatabase.publish.xml" />
-    <None Include="InformationCollectionDatabase_1.publish.xml" />
+    <None Include="InformationCollectionDatabasePublish.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="InformationCollectionDatabase.refactorlog" />

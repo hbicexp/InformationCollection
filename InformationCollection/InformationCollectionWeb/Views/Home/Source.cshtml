@@ -6,56 +6,61 @@
 
 <p class="title">源管理 &nbsp;&nbsp;&nbsp;&nbsp;<a id="btnAddSource" style="font-size:14px">添加源</a></p>
 
-<div id="SourceList">
-
-    @if (Model == null || Model.Count == 0)
+@if (Model == null || Model.Count == 0)
+{
+    <p>您还没有添加源。</p>
+}
+else
+{
+    bool alt = false;
+    foreach (var userSource in Model)
     {
-        <p>您还没有添加源。</p>
-    }
-    else
-    {
-        foreach (var userSource in Model)
+        if (alt)
         {
-            <p class="line">@userSource.SourceName [@userSource.AddTime.ToString("yy-MM-dd HH:MM")] @userSource.Url </p>
+            alt = false;
+            <div class="alt">
+                <p class="line">@userSource.SourceName [@userSource.CreateTime.ToString("yy-MM-dd HH:MM")] @Html.ActionLink("删除", "DelSource", "Home", new { id = userSource.SourceId }, new { onclick = "return confirm('您确定要删除该源地址吗？')" })</p>
+                <p class="line" style="padding-left:50px;"><a href="@userSource.Url">@userSource.Url</a></p>
+            </div>
+        }
+        else
+        {
+            alt = true;
+            <div>
+                <p class="line">@userSource.SourceName [@userSource.CreateTime.ToString("yy-MM-dd HH:MM")] @Html.ActionLink("删除", "DelSource", "Home", new { id = userSource.SourceId }, new { onclick = "return confirm('您确定要删除该源地址吗？')" })</p>
+                <p class="line" style="padding-left:50px;"><a href="@userSource.Url">@userSource.Url</a></p>
+            </div>
         }
     }
-</div>
 
-@Html.Partial("_AddSource", new TimiSoft.InformationCollection.Models.UserSource())
 
-<script language="javascript" type="text/javascript">
-    $(function () {
-        $("#dialog-form").dialog({
-            autoOpen: false,
-            height: 328,
-            width: 550,
-            modal: true,
-            buttons: {
-                "添加": function () {
-                    var bValid = true;
-                    //bValid = bValid && checkLength(name, "username", 3, 16);
-                    //bValid = bValid && checkLength(email, "email", 6, 80);
-                    //bValid = bValid && checkLength(password, "password", 5, 16);
-                    //bValid = bValid && checkRegexp(name, /^[a-z]([0-9a-z_])+$/i, "Username may consist of a-z, 0-9, underscores, begin with a letter.");
-                    //bValid = bValid && checkRegexp(password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9");
+    @Html.Partial("_AddSource", new TimiSoft.InformationCollection.Models.UserSource())
 
-                    if (bValid) {
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            $("#dialog-form").dialog({
+                autoOpen: false,
+                height: 328,
+                width: 550,
+                modal: true,
+                buttons: {
+                    "添加": function () {
                         $("form").submit();
+                    },
+                    Cancel: function () {
+                        $(this).dialog("close");
                     }
                 },
-                Cancel: function () {
-                    $(this).dialog("close");
+                close: function () {
+                    //allFields.val("").removeClass("ui-state-error");
                 }
-            },
-            close: function () {
-                //allFields.val("").removeClass("ui-state-error");
-            }
-        });
-
-        $("#btnAddSource")
-            .button()
-            .click(function () {
-                $("#dialog-form").dialog("open");
             });
-    });
-</script>
+
+            $("#btnAddSource")
+                .button()
+                .click(function () {
+                    $("#dialog-form").dialog("open");
+                });
+        });
+    </script>
+}

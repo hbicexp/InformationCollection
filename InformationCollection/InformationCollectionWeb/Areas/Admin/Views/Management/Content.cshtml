@@ -1,0 +1,24 @@
+﻿@model List<TimiSoft.InformationCollection.Models.SourceContent>
+@{
+    Layout = "../Shared/_Content.cshtml";
+}
+
+<p class="title">
+    源管理
+</p>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p class="line">还没有采集到信息</p>
+
+}
+else
+{
+    foreach (var sourceContent in Model)
+    {
+        <p class="line">
+            <a href="@sourceContent.Url" target="_blank">@sourceContent.Content</a>
+            [@(sourceContent.ContentType == 0 ? "系统" : "用户")]
+        </p>
+    }
+}

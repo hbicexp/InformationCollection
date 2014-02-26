@@ -77,7 +77,7 @@ namespace TimiSoft.InformationCollection
                 this.log.Info("Start Collect");
                 this.Collect(beginTime);
 
-                beginTime = beginTime.AddHours(0.1);
+                beginTime = beginTime.AddHours(1);
                 while (beginTime > DateTime.Now && this.ThreadState != System.Threading.ThreadState.StopRequested)
                 {
                     Thread.Sleep(5000);
@@ -95,6 +95,8 @@ namespace TimiSoft.InformationCollection
         {
             try
             {
+                SourceContentManager.ReloadSourceRegexes();
+
                 var watchedSources = this.GetWatchedSources();
                 foreach (var source in watchedSources)
                 {

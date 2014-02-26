@@ -14,8 +14,13 @@ namespace TimiSoft.InformationCollectionWeb
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        private static log4net.ILog log = log4net.LogManager.GetLogger(typeof(MvcApplication));
+
         protected void Application_Start()
         {
+            log4net.Config.XmlConfigurator.Configure();
+            log.Info("Web is Start!");
+
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
@@ -24,5 +29,11 @@ namespace TimiSoft.InformationCollectionWeb
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
         }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            log.Debug(this.Context.Error); 
+        }
+
     }
 }

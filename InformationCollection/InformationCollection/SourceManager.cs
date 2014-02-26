@@ -36,19 +36,22 @@ namespace TimiSoft.InformationCollection
                         Url = userSource.Url,
                         Domain = GetDomain(userSource.Url),
                         Interval = userSource.Interval,
-                        AddTime = DateTime.Now,
+                        CreateTime = DateTime.Now,
                     };
 
                     source.UserSourceLinks.Add(new Models.UserSourceLink()
                     {
                         Source = sourceInDB,
-                        UserId = userId,
-                        AddTime = DateTime.Now
+                        SourceName = userSource.SourceName,
+                        Interval = userSource.Interval,
+                        UserId = userId, 
+                        CreateTime = DateTime.Now
                     });
                     context.Sources.Add(source);
                     context.SaveChanges();
 
                     // collect system info
+                    SourceContentManager.ReloadSourceRegexes();
                     SourceContentManager.Collect(source, DateTime.Now, SourceContentType.System);
                 }
                 else
@@ -58,9 +61,11 @@ namespace TimiSoft.InformationCollection
                     {
                         sourceInDB.UserSourceLinks.Add(new Models.UserSourceLink()
                         {
-                            Source = sourceInDB,
+                            SourceName = userSource.SourceName,
+                            Interval = userSource.Interval,
+                            Source = sourceInDB, 
                             UserId = userId,
-                            AddTime = DateTime.Now
+                            CreateTime = DateTime.Now
                         });
                     }
 
@@ -95,8 +100,16 @@ namespace TimiSoft.InformationCollection
                             SourceId = p.SourceId,
                             SourceName = p.SourceName,
                             Url = p.Url,
-                            AddTime = q.AddTime
+                            CreateTime = q.CreateTime, Interval = q.Interval
                         }).ToList();
+            }
+        }
+
+        public static List<Models.Source> GetSourceList()
+        {
+            using (Models.ICContext context = new Models.ICContext())
+            {
+                return context.Sources.ToList();
             }
         }
 
@@ -105,6 +118,23 @@ namespace TimiSoft.InformationCollection
             using (Models.ICContext context = new Models.ICContext())
             {
                 return context.Sources.Find(id);
+            }
+        }
+
+        public static void RemoveSource(int userId, int sourceId)
+        {
+            using (Models.ICContext context = new Models.ICContext())
+            {
+                context.Database.ExecuteSqlCommand(@"
+Delete From P 
+From UserSourceContentLink P
+ join SourceContent Q on P.SourceContentId=Q.SourceContentId
+ join UserSourceLink R on Q.SourceId=R.SourceId
+Where P.UserId = {0} and R.SourceId = {1}", userId, sourceId);
+
+                context.Database.ExecuteSqlCommand(@"
+Delete From UserSourceLink
+Where UserId = {0} and SourceId = {1}", userId, sourceId);;
             }
         }
     }

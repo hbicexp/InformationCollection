@@ -1,0 +1,55 @@
+﻿@model IEnumerable<TimiSoft.InformationCollection.Models.SourceRegexGroup>
+
+@{
+    Layout = "../Shared/_Content.cshtml";
+}
+
+<p class="title">规则管理 &nbsp;&nbsp;&nbsp;&nbsp;@Html.ActionLink("新增", "Create", null, new { @class = "btn", style = "font-size:14px" })</p>
+<table style="width:724px;">
+    <tr class="line">
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Domain)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Regex)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Enabled)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Decode)
+        </th>
+        <th>&nbsp;</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Domain)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Regex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enabled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Decode)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.SourceRegexGroupId }) |
+                @Html.ActionLink("Regexes", "Index", "SourceRegex", new { id = item.SourceRegexGroupId }, null)
+                @Html.ActionLink("Details", "Details", new { id = item.SourceRegexGroupId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.SourceRegexGroupId })
+            </td>
+        </tr>
+    }
+
+</table>

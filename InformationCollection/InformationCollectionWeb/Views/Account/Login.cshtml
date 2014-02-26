@@ -9,36 +9,38 @@
     <hgroup class="title">
         <h1>@ViewBag.Title.</h1>
     </hgroup>
-    <h3>使用本地帐户登录。</h3>
-    @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
 
-        <fieldset>
-            <legend>“登录”表单</legend>
-            <ol>
-                <li>
-                    @Html.LabelFor(m => m.UserName)
-                    @Html.TextBoxFor(m => m.UserName)
-                    @Html.ValidationMessageFor(m => m.UserName)
-                </li>
-                <li>
-                    @Html.LabelFor(m => m.Password)
-                    @Html.PasswordFor(m => m.Password)
-                    @Html.ValidationMessageFor(m => m.Password)
-                </li>
-                <li>
-                    @Html.CheckBoxFor(m => m.RememberMe)
-                    @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
-                </li>
-            </ol>
-            <input type="submit" value="登录" />
-        </fieldset>
-        <p>
-            @Html.ActionLink("Register", "Register") (如果你没有帐户)。
-        </p>
-    }
+
+    <h3 class="form-signin-heading">使用本地帐户登录。</h3>
+    <div class="container">
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", @class = "form-signin" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <fieldset>
+                <legend>“登录”表单</legend>
+                <ol>
+                    <li>
+                        @Html.LabelFor(m => m.UserName)
+                        <input type="text" name="UserName" class="form-control" placeholder="请输入用户名" required autofocus>
+                    </li>
+                    <li>
+                        @Html.LabelFor(m => m.Password)
+                        <input type="password" name="Password" class="form-control" placeholder="请输入密码" required>
+                    </li>
+                    <li>
+                        @Html.CheckBoxFor(m => m.RememberMe)
+                        @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
+                    </li>
+                </ol>
+                <input class="btn btn-lg btn-primary btn-block" type="submit" value="登录" />
+            </fieldset>
+            <p>
+                @Html.ActionLink("Register", "Register") (如果你没有帐户)。
+            </p>
+        }
+    </div>
 </section>
 
 <section class="social" id="socialLoginForm">
@@ -48,3 +50,4 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+

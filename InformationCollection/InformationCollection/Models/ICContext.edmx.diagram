@@ -5,18 +5,20 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="2166f018774f4491ab0419359a0896f6" Name="Diagram1">
-        <EntityTypeShape EntityType="InformationCollection.Models.Source" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="InformationCollection.Models.UserProfile" Width="1.5" PointX="5.125" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="InformationCollection.Models.UserSourceLink" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <AssociationConnector Association="InformationCollection.Models.FK_UserSourceLink_Source" ManuallyRouted="false" />
-        <AssociationConnector Association="InformationCollection.Models.FK_UserSourceLink_UserProfile" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="InformationCollection.Models.SourceContent" Width="1.5" PointX="3" PointY="4.125" />
-        <AssociationConnector Association="InformationCollection.Models.FK_SourceContent_Source" />
-        <EntityTypeShape EntityType="InformationCollection.Models.SourceRegex" Width="1.5" PointX="5.375" PointY="5.75" />
-        <EntityTypeShape EntityType="InformationCollection.Models.UserSourceContentLink" Width="1.5" PointX="7.375" PointY="2.75" />
-        <AssociationConnector Association="InformationCollection.Models.FK_UserSourceContentLink_SourceContent" />
+        <EntityTypeShape EntityType="InformationCollection.Models.SourceRegex" Width="1.5" PointX="5.75" PointY="3.875" />
+        <EntityTypeShape EntityType="InformationCollection.Models.UserProfile" Width="1.5" PointX="3.25" PointY="0.875" />
+        <EntityTypeShape EntityType="InformationCollection.Models.UserSourceContentLink" Width="1.5" PointX="0.75" PointY="0.875" />
         <AssociationConnector Association="InformationCollection.Models.FK_UserSourceContentLink_UserProfile" />
-      </Diagram>
+        <EntityTypeShape EntityType="InformationCollection.Models.SourceRegexGroup" Width="1.5" PointX="5.75" PointY="0.875" />
+        <AssociationConnector Association="InformationCollection.Models.FK_SourceRegex_SourceRegexGroup" />
+        <EntityTypeShape EntityType="InformationCollection.Models.Source" Width="1.5" PointX="3.25" PointY="6.375" />
+        <EntityTypeShape EntityType="InformationCollection.Models.UserSourceLink" Width="1.5" PointX="3.25" PointY="3.125" />
+        <AssociationConnector Association="InformationCollection.Models.FK_UserSourceLink_Source" />
+        <AssociationConnector Association="InformationCollection.Models.FK_UserSourceLink_UserProfile" />
+        <EntityTypeShape EntityType="InformationCollection.Models.SourceContent" Width="1.5" PointX="0.75" PointY="4.375" />
+        <AssociationConnector Association="InformationCollection.Models.FK_SourceContent_Source" />
+        <AssociationConnector Association="InformationCollection.Models.FK_UserSourceContentLink_SourceContent" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

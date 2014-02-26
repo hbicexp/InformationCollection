@@ -18,5 +18,9 @@ namespace TimiSoft.InformationCollection.Models
         public string Regex { get; set; }
         public string Name { get; set; }
         public bool IsMatched { get; set; }
+        public string RegexType { get; set; }
+        public int SourceRegexGroupId { get; set; }
+    
+        public virtual SourceRegexGroup SourceRegexGroup { get; set; }
     }
 }

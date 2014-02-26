@@ -76,6 +76,9 @@
     <Compile Include="Models\SourceRegex.cs">
       <DependentUpon>ICContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SourceRegexGroup.cs">
+      <DependentUpon>ICContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserProfile.cs">
       <DependentUpon>ICContext.tt</DependentUpon>
     </Compile>
@@ -92,6 +95,7 @@
     <Compile Include="SourceContentWatcher.cs" />
     <Compile Include="SourceContentManager.cs" />
     <Compile Include="SourceManager.cs" />
+    <Compile Include="SourceRegex.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="UserSourceContentLinkManager.cs" />
     <Compile Include="Utility\RequestHelper.cs" />

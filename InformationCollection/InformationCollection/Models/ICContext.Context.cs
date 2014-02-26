@@ -25,11 +25,12 @@ namespace TimiSoft.InformationCollection.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<Source> Sources { get; set; }
+        public DbSet<SourceRegex> SourceRegexes { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<UserSourceContentLink> UserSourceContentLinks { get; set; }
+        public DbSet<SourceRegexGroup> SourceRegexGroups { get; set; }
+        public DbSet<Source> Sources { get; set; }
         public DbSet<UserSourceLink> UserSourceLinks { get; set; }
         public DbSet<SourceContent> SourceContents { get; set; }
-        public DbSet<SourceRegex> SourceRegexes { get; set; }
-        public DbSet<UserSourceContentLink> UserSourceContentLinks { get; set; }
     }
 }

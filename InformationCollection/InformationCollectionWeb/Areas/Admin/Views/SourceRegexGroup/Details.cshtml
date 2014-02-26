@@ -1,0 +1,50 @@
+﻿@model TimiSoft.InformationCollection.Models.SourceRegexGroup
+
+@{
+    Layout = "../Shared/_Content.cshtml";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>SourceRegexGroup</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Domain)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Domain)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Regex)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Regex)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Enabled)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Enabled)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Decode)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Decode)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.SourceRegexGroupId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

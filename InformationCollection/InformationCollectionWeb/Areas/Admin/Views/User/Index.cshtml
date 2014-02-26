@@ -1,0 +1,29 @@
+﻿@model IList<TimiSoft.InformationCollection.Models.UserProfile>
+@{
+    Layout = "../Shared/_Content.cshtml";
+}
+
+<p class="title">用户管理</p>
+
+@if (Model == null)
+{
+    <p class="line">暂无用户</p>
+}
+else
+{
+    var css = new { @class = "btn" };
+    var roles = (SimpleRoleProvider)Roles.Provider;
+    foreach (var user in Model)
+    {
+        <table>
+            @if (roles.GetRolesForUser(user.UserName).Contains("Administrator"))
+            {
+                <tr class="line"><td style="width:400px;">@user.UserName [管理员]</td><td>@Html.ActionLink("取消管理员", "RemoveAdmin", new { uName = user.UserName }, css) @Html.ActionLink("删除用户", "Delete", new { Id = user.UserId }, css) </td></tr>
+            }
+            else
+            {
+                <tr class="line"><td style="width:400px;">@user.UserName </td><td>@Html.ActionLink("设为管理员", "SetAdmin", new { uName = user.UserName }, css) @Html.ActionLink("删除用户", "Delete", new { Id = user.UserId }, css) </td></tr>
+            }
+        </table>
+    }
+}

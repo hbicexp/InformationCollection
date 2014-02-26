@@ -1,0 +1,23 @@
+﻿@model TimiSoft.InformationCollection.Models.UserSource
+@{
+    Layout = "../Shared/_Content.cshtml";
+}
+<p class="title">
+    数据清理
+</p>
+<p class="line">@ViewBag.Message</p>
+@using (Html.BeginForm("Clear", "Data"))
+{
+    <p class="line">请选择要需要清理的时段</p>
+    <p class="line">@Html.RadioButton("Interval", 0) 0 天前</p>
+    <p class="line">@Html.RadioButton("Interval", 1) 1 天前</p>
+    <p class="line">@Html.RadioButton("Interval", 7) 7 天前</p>
+    <p class="line">@Html.RadioButton("Interval", 15) 15天前</p>
+    <p class="line">@Html.RadioButton("Interval", 30) 30天前</p>
+    <p class="line">@Html.RadioButton("Interval", 60) 60天前</p>
+    <p class="line">@Html.RadioButton("Interval", 90) 3 月前</p>
+    <p class="line">@Html.RadioButton("Interval", 120) 4 月前</p>
+    <p class="line">@Html.RadioButton("Interval", 180) 6 月前</p>
+    <p class="line">@Html.RadioButton("Interval", 360) 1 年前</p>
+    <p class="line"><input type="submit" value="提交" /></p>
+}
