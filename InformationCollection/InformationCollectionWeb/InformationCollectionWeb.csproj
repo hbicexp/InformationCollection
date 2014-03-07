@@ -187,6 +187,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\images\animated-overlay.gif" />
     <Content Include="Content\sigin.css" />
     <Content Include="Images\flag.jpg" />
@@ -274,18 +276,22 @@
     <Content Include="Areas\Admin\Views\SourceRegexGroup\Create.cshtml" />
     <Content Include="Areas\Admin\Views\SourceRegexGroup\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SourceRegexGroup\Delete.cshtml" />
+    <Content Include="Content\font\fontawesome-webfont.eot" />
+    <Content Include="Content\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\font\fontawesome-webfont.woff" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
+    <Content Include="Images\icon_server_plus.png" />
     <Content Include="Images\icon_star.png" />
     <Content Include="Images\icon_list.png" />
     <Content Include="Images\icon_cogwheel.png" />
     <Content Include="Images\icon_refresh.png" />
     <Content Include="Images\icon_tag.png" />
-    <Content Include="Images\icon_tags.png" />
     <Content Include="Images\icon_user.png" />
     <Content Include="Images\logo.jpg" />
     <Content Include="Images\logo01.jpg" />
-    <Content Include="Images\new.jpg" />
+    <Content Include="Images\message.jpg" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\google-maps.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Content\jquery-ui-1.10.4.custom.min.css" />
@@ -298,6 +304,9 @@
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\page.js" />
+    <Content Include="Views\Home\Favor.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -321,17 +330,8 @@
     <Content Include="Images\orderedList8.png" />
     <Content Include="Images\orderedList9.png" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\_ChangePasswordPartial.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\_RemoveExternalLoginsPartial.cshtml" />
-    <Content Include="Views\Home\_SetPasswordPartial.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Home\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
@@ -344,7 +344,6 @@
     <Content Include="Views\Shared\_Content.cshtml" />
     <Content Include="Views\Home\_SourceContents.cshtml" />
     <Content Include="Views\Home\Content.cshtml" />
-    <Content Include="Views\Home\Favor.cshtml" />
     <Content Include="Areas\Admin\Views\SourceRegex\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SourceRegex\Details.cshtml" />
     <Content Include="Areas\Admin\Views\SourceRegex\Create.cshtml" />
@@ -352,6 +351,10 @@
     <Content Include="Areas\Admin\Views\SourceRegex\Delete.cshtml" />
     <Content Include="Views\Shared\_Account.cshtml" />
     <Content Include="Views\Home\All.cshtml" />
+    <Content Include="Views\Home\_AllSourceContents.cshtml" />
+    <Content Include="Views\Home\UserAll.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
+    <Content Include="Views\Home\_SourceContentList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

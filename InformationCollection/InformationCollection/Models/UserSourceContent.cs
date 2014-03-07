@@ -20,5 +20,7 @@ namespace TimiSoft.InformationCollection.Models
         public int AddHours { get; set; }
 
         public DateTime AddDate { get; set; }
+
+        public bool IsNew { get; set; }
     }
 }

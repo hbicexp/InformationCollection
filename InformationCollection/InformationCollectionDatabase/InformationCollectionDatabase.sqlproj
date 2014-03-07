@@ -71,6 +71,7 @@
     <Build Include="dbo\Tables\Source.sql" />
     <Build Include="dbo\Tables\UserSourceLink.sql" />
     <Build Include="dbo\Tables\SourceRegexGroup.sql" />
+    <Build Include="dbo\Tables\UserSourceContentFavorLink.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="InformationCollectionDatabase.publish.xml" />

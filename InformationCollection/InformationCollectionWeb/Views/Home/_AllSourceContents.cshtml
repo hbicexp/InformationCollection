@@ -2,13 +2,13 @@
 @using (Html.BeginForm())
 {
     <div class="search">
-        <b>关键字：</b>@Html.TextBox("search", Request["search"], new { id = "Search", style = "width:335px" })
+        <b>关键字：</b>@Html.TextBox("search", Request["search"], new { id = "Search" })
+        <b>省份：</b>@Html.TextBox("province", Request["province"], new { id = "Province" })
         <b>日期：</b>@Html.TextBox("begindate", Request["BeginDate"], new { id = "BeginDate" })
         <b>到</b> @Html.TextBox("enddate", Request["EndDate"], new { id = "EndDate" })<button class="btn" type="submit">搜索</button>
     </div>
-    
+
     @Html.Partial("_SourceContentList", Model)
-                        
 }
 
 <script type="text/javascript" language="javascript">

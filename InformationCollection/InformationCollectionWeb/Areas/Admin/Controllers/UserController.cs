@@ -53,7 +53,7 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        public ActionResult AddAdmin(string uName)
+        public ActionResult RemoveAdmin(string uName)
         {
             var roles = (SimpleRoleProvider)Roles.Provider;
             roles.RemoveUsersFromRoles(new[] { uName }, new[] { "Administrator" });

@@ -26,7 +26,7 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
 
         public ActionResult Index()
         {
-            return View(db.SourceRegexGroups.ToList());
+            return View(db.SourceRegexGroups.OrderBy(p=>p.Name).ToList());
         }
 
         //

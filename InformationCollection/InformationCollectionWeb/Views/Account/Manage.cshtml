@@ -1,0 +1,50 @@
+﻿@model TimiSoft.InformationCollectionWeb.Models.LocalPasswordModel
+@{
+    ViewBag.Title = "管理帐户";
+    ViewBag.Selected = "Account";
+}
+
+<section id="loginForm">
+
+
+    <p>你已使用 <strong>@User.Identity.Name</strong>. 身份登录。</p>
+    <h3>@ViewBag.StatusMessage</h3>
+
+    @using (Html.BeginForm("Manage", "Account"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <fieldset>
+            <legend>“更改密码”表单</legend>
+            <ol>
+                <li>
+                    @Html.LabelFor(m => m.OldPassword)
+                    @Html.PasswordFor(m => m.OldPassword)
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.NewPassword)
+                    @Html.PasswordFor(m => m.NewPassword)
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.ConfirmPassword)
+                    @Html.PasswordFor(m => m.ConfirmPassword)
+                </li>
+            </ol>
+            <input type="submit" id="ChangePassword" value="更改密码" />
+        </fieldset>
+    }
+
+</section>
+
+<section class="social" id="socialLoginForm" style="width:240px;">
+    <h3>请牢记您的密码并定期修改。</h3>
+    <h3>@Html.ActionLink("返回首页", "Index", "Home", null, new { id = "BackToHome", @class = "btn" })</h3>
+</section>
+
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $("#BackToHome").button();
+        $("#ChangePassword").button();
+    });
+</script>

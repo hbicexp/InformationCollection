@@ -4,6 +4,7 @@
     <p class="validateTips">所有字段都需要输入！</p>
     @using (Ajax.BeginForm("AddSource", "Home", new AjaxOptions { HttpMethod = "Post", OnSuccess = "onSuccess", UpdateTargetId = "SourceList" }))
     {
+        @Html.HiddenFor(m => m.SourceId);
         <fieldset>
             @Html.LabelFor(m => m.SourceName)
             @Html.TextBoxFor(m => m.SourceName, new { style = "width:500px;" })

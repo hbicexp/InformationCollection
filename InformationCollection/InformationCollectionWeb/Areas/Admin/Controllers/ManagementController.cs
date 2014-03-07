@@ -52,7 +52,7 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
             }
 
             SourceContentManager.ReloadSourceRegexes();
-            SourceContentManager.Clear(id);
+            SourceContentManager.ClearSourceContents(id);
 
             ViewBag.Title = "源管理";
             ViewBag.Selected = "Index";
@@ -61,7 +61,7 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
 
         public ActionResult Content(int id)
         {
-            var model = SourceContentManager.GetContents(id);
+            var model = SourceContentManager.GetSourceContents(id);
 
             ViewBag.Title = "源管理";
             ViewBag.Selected = "Index";

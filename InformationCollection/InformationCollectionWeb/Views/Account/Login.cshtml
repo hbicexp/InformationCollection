@@ -34,10 +34,10 @@
                         @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
                     </li>
                 </ol>
-                <input class="btn btn-lg btn-primary btn-block" type="submit" value="登录" />
+                <input id="Login" type="submit" value="登录" />
+                @Html.ActionLink("注册", "Register", null, new { id = "Register" }) (如果你没有帐户)。
             </fieldset>
             <p>
-                @Html.ActionLink("Register", "Register") (如果你没有帐户)。
             </p>
         }
     </div>
@@ -51,3 +51,9 @@
     @Scripts.Render("~/bundles/jqueryval")
 }
 
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $("#Login").button();
+        $("#Register").button();
+    });
+</script>

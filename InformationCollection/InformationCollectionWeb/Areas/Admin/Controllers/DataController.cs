@@ -29,7 +29,7 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
                 return HttpNotFound();
             }
 
-            SourceContentManager.ClearSourceContents(interval);
+            SourceContentManager.ClearAllSourceContents(interval);
             ViewBag.Message = "清理成功！";
             return View();
         }

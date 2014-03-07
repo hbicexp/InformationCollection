@@ -18,6 +18,7 @@ namespace TimiSoft.InformationCollection.Models
         {
             this.UserSourceContentLinks = new HashSet<UserSourceContentLink>();
             this.UserSourceLinks = new HashSet<UserSourceLink>();
+            this.UserSourceContentFavorLinks = new HashSet<UserSourceContentFavorLink>();
         }
     
         public int UserId { get; set; }
@@ -25,5 +26,6 @@ namespace TimiSoft.InformationCollection.Models
     
         public virtual ICollection<UserSourceContentLink> UserSourceContentLinks { get; set; }
         public virtual ICollection<UserSourceLink> UserSourceLinks { get; set; }
+        public virtual ICollection<UserSourceContentFavorLink> UserSourceContentFavorLinks { get; set; }
     }
 }

@@ -1,0 +1,137 @@
+﻿@model List<TimiSoft.InformationCollection.Models.UserSourceContent>
+@if (Model == null || Model.Count == 0)
+{
+    <p>暂时没有新的信息！</p>
+}
+else
+{
+    string source = string.Empty;
+    bool alt = false;
+    var cssLine = "";
+    for (var i = 0; i < Model.Count; i++, alt = !alt)
+    {
+        var sourceContent = Model[i];
+        if (sourceContent.Source != source)
+        {
+            source = sourceContent.Source;
+            <p class="title">@Html.ActionLink(source, "Content", "Home", new { Id = sourceContent.SourceId }, null) &nbsp;&nbsp;&nbsp;&nbsp;<font style="font-size:14px">[@sourceContent.AddTime.ToString("yyyy-MM-dd") @sourceContent.AddHours.ToString("00"):00]</font></p>
+        }
+
+        cssLine = alt ? "line alt" : "line";
+
+        <div class="@cssLine">
+            @if (sourceContent.IsNew)
+            {
+                <a class="message unread" onclick="ReadLine(this, @sourceContent.SourceContentId)">&nbsp;</a>
+            }
+            else
+            {
+                <a class="message">&nbsp;</a>
+            }
+            @if (sourceContent.IsFavor)
+            {
+                <a class="flag favor" onclick="SetFavor(this, @sourceContent.SourceContentId)">&nbsp;</a>
+            }
+            else
+            {
+                <a class="flag" onclick="SetFavor(this, @sourceContent.SourceContentId)">&nbsp;</a>
+            }
+            @if (sourceContent.IsNew)
+            {
+                <a href="@sourceContent.Url" onclick="ReadLink(this, @sourceContent.SourceContentId)" target="_blank">@(sourceContent.Content.Length > 40 ? sourceContent.Content.Substring(0, 37) + "..." : sourceContent.Content)</a>
+            }
+            else
+            {
+                <a href="@sourceContent.Url" target="_blank">@(sourceContent.Content.Length > 40 ? sourceContent.Content.Substring(0, 37) + "..." : sourceContent.Content)</a>
+            }
+            <div class="float-right">@sourceContent.SourceDate.ToString("yyyy-MM-dd")</div>
+        </div>
+    }
+
+    <div id="PagePlaceHolder">
+        @{
+    string pageCount = ViewBag.PageCount == null ? "1" : ViewBag.PageCount.ToString();
+    string pageIndex = ViewBag.PageIndex == null ? "1" : ViewBag.PageIndex.ToString();
+        }
+        @Html.Hidden("count", pageCount)
+        @Html.Hidden("page", pageIndex)
+        <script type="text/javascript" language="javascript">
+
+            function gotoPage(num) {
+                $("#page").val(num);
+                $("Form").submit();
+            }
+            var pg = new showPages('pg');
+            pg.pageCount = ~~$("#count").val();
+            pg.page = ~~$("#page").val();
+            pg.callbackFunc = gotoPage;
+            pg.printHtml(1);
+        </script>
+    </div>
+
+    <script type="text/javascript" language="javascript">
+        function SetFavor(l, id) {
+            var link = $(l);
+            if (link.hasClass("favor")) {
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/Home/RemoveFavor/" + id,
+                    success: function (res) {
+                        if (res) {
+                            link.removeClass("favor");
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/Home/AddFavor/" + id,
+                    success: function (res) {
+                        if (res) {
+                            link.addClass("favor");
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+        }
+
+        function Read(link, id) {
+            if (link.hasClass("unread")) {
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/Home/Read/" + id,
+                    success: function (res) {
+                        if (res) {
+                            link.removeClass("unread");
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+        }
+
+        function ReadLine(l, id) {
+            var link = $(l);
+            Read(link, id);
+        }
+
+        function ReadLink(l, id) {
+            var link = $(l);
+            var prevs = link.prevAll();
+            if (prevs && prevs.length > 0) {
+                var line = prevs[prevs.length - 1];
+                Read($(line), id);
+            }
+        }
+    </script>
+
+}

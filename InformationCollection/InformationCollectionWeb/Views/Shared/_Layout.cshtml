@@ -6,9 +6,9 @@
     <title>@ViewBag.Title - 信息采集系统</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
-    @RenderSection("css", required: false)
-    @Styles.Render("~/Content/css")
+    <link href="~/Content/site.css" rel="stylesheet" />
     <link href="~/Content/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
+    @RenderSection("css", required: false)
     <script src="~/Scripts/jquery-1.7.1.min.js"></script>
     <script src="~/Scripts/jquery-ui-1.10.4.custom.min.js"></script>
     @RenderSection("scripts", required: false)
@@ -17,7 +17,7 @@
     <header>
         <div class="content">
             <div class="float-left">
-                <img src="~/Images/logo.jpg" />
+                <a href="http://www.cbtgc.com/"><img src="~/Images/logo.jpg" /></a>
             </div>
             <div class="float-left">
                 <p class="site-title"><a href="/">信息采集系统</a></p>
@@ -30,14 +30,14 @@
         </div>
     </header>
     <div id="body">
-        <div class="content clear-fix">  
+        <div class="content clear-fix">
             @RenderBody()
         </div>
     </div>
     <footer>
         <div class="content">
             <div class="float-left">
-                <p>&copy; @DateTime.Now.Year - 信息采集系统</p>
+                <p>版权所有：<a href="http://www.cbtgc.com/">中国建筑技术集团有限公司</a>&copy; @DateTime.Now.Year - 信息采集系统</p>
             </div>
         </div>
     </footer>

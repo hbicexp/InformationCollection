@@ -4,7 +4,7 @@
     [SourceId] INT NOT NULL, 
     [Content] NVARCHAR(4000) NOT NULL, 
     [ContentType] INT NOT NULL, 
-    [Url] VARCHAR(5000) NOT NULL, 
+    [Url] NVARCHAR(4000) NOT NULL, 
     [AddTime] DATETIME NOT NULL, 
     [AddDate] DATETIME NOT NULL DEFAULT '2014-01-01', 
     [AddHour] int NOT NULL DEFAULT 0, 

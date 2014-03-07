@@ -30,7 +30,8 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
                        join q in db.SourceRegexGroups
                        on p.SourceRegexGroupId equals q.SourceRegexGroupId
                        where id == 0 || p.SourceRegexGroupId == id
-                       select new InformationCollection.SourceRegex
+                       orderby q.Name, p.RegexType, p.Name
+                       select new InformationCollection.Models.SourceRegexView
                        {
                            IsMatched = p.IsMatched,
                            Name = p.Name,
@@ -70,7 +71,7 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Create(InformationCollection.SourceRegex sourceregex)
+        public ActionResult Create(InformationCollection.Models.SourceRegexView sourceregex)
         {
             if (ModelState.IsValid)
             {

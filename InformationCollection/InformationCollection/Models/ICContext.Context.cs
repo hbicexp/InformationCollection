@@ -32,5 +32,6 @@ namespace TimiSoft.InformationCollection.Models
         public DbSet<Source> Sources { get; set; }
         public DbSet<UserSourceLink> UserSourceLinks { get; set; }
         public DbSet<SourceContent> SourceContents { get; set; }
+        public DbSet<UserSourceContentFavorLink> UserSourceContentFavorLinks { get; set; }
     }
 }

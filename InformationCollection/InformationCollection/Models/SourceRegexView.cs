@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
-namespace TimiSoft.InformationCollection
+namespace TimiSoft.InformationCollection.Models
 {
-    public class SourceRegex
+    public class SourceRegexView
     {
         [Display(Name = "组")]
         public string SourceRegexGroup { get; set; }

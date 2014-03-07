@@ -11,8 +11,8 @@
           </Key>
           <Property Name="SourceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SourceName" Type="nvarchar" MaxLength="500" Nullable="false" />
-          <Property Name="Domain" Type="varchar" MaxLength="500" Nullable="false" />
-          <Property Name="Url" Type="varchar" MaxLength="4000" Nullable="false" />
+          <Property Name="Domain" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Url" Type="nvarchar" MaxLength="4000" Nullable="false" />
           <Property Name="Interval" Type="int" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
         </EntityType>
@@ -24,7 +24,7 @@
           <Property Name="SourceId" Type="int" Nullable="false" />
           <Property Name="Content" Type="nvarchar" MaxLength="4000" Nullable="false" />
           <Property Name="ContentType" Type="int" Nullable="false" />
-          <Property Name="Url" Type="varchar" MaxLength="5000" Nullable="false" />
+          <Property Name="Url" Type="nvarchar" MaxLength="4000" Nullable="false" />
           <Property Name="AddTime" Type="datetime" Nullable="false" />
           <Property Name="AddDate" Type="datetime" Nullable="false" />
           <Property Name="AddHour" Type="int" Nullable="false" />
@@ -47,7 +47,7 @@
           </Key>
           <Property Name="SourceRegexGroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Domain" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Domain" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="Regex" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="Enabled" Type="bit" Nullable="false" />
           <Property Name="Decode" Type="bit" Nullable="false" />
@@ -58,6 +58,14 @@
           </Key>
           <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="UserSourceContentFavorLink">
+          <Key>
+            <PropertyRef Name="UserSourceContentFavorLinkId" />
+          </Key>
+          <Property Name="UserSourceContentFavorLinkId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="SourceContentId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserSourceContentLink">
           <Key>
@@ -100,6 +108,30 @@
             </Principal>
             <Dependent Role="SourceRegex">
               <PropertyRef Name="SourceRegexGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSourceContentFavorLink_SourceContent">
+          <End Role="SourceContent" Type="Self.SourceContent" Multiplicity="1" />
+          <End Role="UserSourceContentFavorLink" Type="Self.UserSourceContentFavorLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SourceContent">
+              <PropertyRef Name="SourceContentId" />
+            </Principal>
+            <Dependent Role="UserSourceContentFavorLink">
+              <PropertyRef Name="SourceContentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSourceContentFavorLink_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="UserSourceContentFavorLink" Type="Self.UserSourceContentFavorLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserSourceContentFavorLink">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -157,6 +189,7 @@
           <EntitySet Name="SourceRegex" EntityType="Self.SourceRegex" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SourceRegexGroup" EntityType="Self.SourceRegexGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserSourceContentFavorLink" EntityType="Self.UserSourceContentFavorLink" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserSourceContentLink" EntityType="Self.UserSourceContentLink" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserSourceLink" EntityType="Self.UserSourceLink" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_SourceContent_Source" Association="Self.FK_SourceContent_Source">
@@ -166,6 +199,14 @@
           <AssociationSet Name="FK_SourceRegex_SourceRegexGroup" Association="Self.FK_SourceRegex_SourceRegexGroup">
             <End Role="SourceRegexGroup" EntitySet="SourceRegexGroup" />
             <End Role="SourceRegex" EntitySet="SourceRegex" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSourceContentFavorLink_SourceContent" Association="Self.FK_UserSourceContentFavorLink_SourceContent">
+            <End Role="SourceContent" EntitySet="SourceContent" />
+            <End Role="UserSourceContentFavorLink" EntitySet="UserSourceContentFavorLink" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSourceContentFavorLink_UserProfile" Association="Self.FK_UserSourceContentFavorLink_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="UserSourceContentFavorLink" EntitySet="UserSourceContentFavorLink" />
           </AssociationSet>
           <AssociationSet Name="FK_UserSourceContentLink_SourceContent" Association="Self.FK_UserSourceContentLink_SourceContent">
             <End Role="SourceContent" EntitySet="SourceContent" />
@@ -220,6 +261,15 @@
             <End Role="SourceContent" EntitySet="SourceContents" />
             <End Role="UserSourceContentLink" EntitySet="UserSourceContentLinks" />
           </AssociationSet>
+          <EntitySet Name="UserSourceContentFavorLinks" EntityType="InformationCollection.Models.UserSourceContentFavorLink" />
+          <AssociationSet Name="FK_UserSourceContentFavorLink_SourceContent" Association="InformationCollection.Models.FK_UserSourceContentFavorLink_SourceContent">
+            <End Role="SourceContent" EntitySet="SourceContents" />
+            <End Role="UserSourceContentFavorLink" EntitySet="UserSourceContentFavorLinks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSourceContentFavorLink_UserProfile" Association="InformationCollection.Models.FK_UserSourceContentFavorLink_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="UserSourceContentFavorLink" EntitySet="UserSourceContentFavorLinks" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="SourceRegex">
           <Key>
@@ -241,6 +291,7 @@
           <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="UserSourceContentLinks" Relationship="InformationCollection.Models.FK_UserSourceContentLink_UserProfile" FromRole="UserProfile" ToRole="UserSourceContentLink" />
           <NavigationProperty Name="UserSourceLinks" Relationship="InformationCollection.Models.FK_UserSourceLink_UserProfile" FromRole="UserProfile" ToRole="UserSourceLink" />
+          <NavigationProperty Name="UserSourceContentFavorLinks" Relationship="InformationCollection.Models.FK_UserSourceContentFavorLink_UserProfile" FromRole="UserProfile" ToRole="UserSourceContentFavorLink" />
         </EntityType>
         <EntityType Name="UserSourceContentLink">
           <Key>
@@ -271,7 +322,7 @@
           <Property Name="SourceRegexGroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SourceRegexes" Relationship="InformationCollection.Models.FK_SourceRegex_SourceRegexGroup" FromRole="SourceRegexGroup" ToRole="SourceRegex" />
-          <Property Name="Domain" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Domain" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Regex" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <Property Name="Decode" Type="Boolean" Nullable="false" />
@@ -294,8 +345,8 @@
           </Key>
           <Property Name="SourceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SourceName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Domain" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="Url" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="Domain" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="Interval" Type="Int32" Nullable="false" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="UserSourceLinks" Relationship="InformationCollection.Models.FK_UserSourceLink_Source" FromRole="Source" ToRole="UserSourceLink" />
@@ -347,13 +398,14 @@
           <Property Name="SourceId" Type="Int32" Nullable="false" />
           <Property Name="Content" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="ContentType" Type="Int32" Nullable="false" />
-          <Property Name="Url" Type="String" Nullable="false" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="AddDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="AddHour" Type="Int32" Nullable="false" />
           <Property Name="SourceDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Source" Relationship="InformationCollection.Models.FK_SourceContent_Source" FromRole="SourceContent" ToRole="Source" />
           <NavigationProperty Name="UserSourceContentLinks" Relationship="InformationCollection.Models.FK_UserSourceContentLink_SourceContent" FromRole="SourceContent" ToRole="UserSourceContentLink" />
+          <NavigationProperty Name="UserSourceContentFavorLinks" Relationship="InformationCollection.Models.FK_UserSourceContentFavorLink_SourceContent" FromRole="SourceContent" ToRole="UserSourceContentFavorLink" />
         </EntityType>
         <Association Name="FK_SourceContent_Source">
           <End Type="InformationCollection.Models.Source" Role="Source" Multiplicity="1" />
@@ -376,6 +428,40 @@
             </Principal>
             <Dependent Role="UserSourceContentLink">
               <PropertyRef Name="SourceContentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserSourceContentFavorLink">
+          <Key>
+            <PropertyRef Name="UserSourceContentFavorLinkId" />
+          </Key>
+          <Property Name="UserSourceContentFavorLinkId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="SourceContentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SourceContent" Relationship="InformationCollection.Models.FK_UserSourceContentFavorLink_SourceContent" FromRole="UserSourceContentFavorLink" ToRole="SourceContent" />
+          <NavigationProperty Name="UserProfile" Relationship="InformationCollection.Models.FK_UserSourceContentFavorLink_UserProfile" FromRole="UserSourceContentFavorLink" ToRole="UserProfile" />
+        </EntityType>
+        <Association Name="FK_UserSourceContentFavorLink_SourceContent">
+          <End Type="InformationCollection.Models.SourceContent" Role="SourceContent" Multiplicity="1" />
+          <End Type="InformationCollection.Models.UserSourceContentFavorLink" Role="UserSourceContentFavorLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SourceContent">
+              <PropertyRef Name="SourceContentId" />
+            </Principal>
+            <Dependent Role="UserSourceContentFavorLink">
+              <PropertyRef Name="SourceContentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSourceContentFavorLink_UserProfile">
+          <End Type="InformationCollection.Models.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="InformationCollection.Models.UserSourceContentFavorLink" Role="UserSourceContentFavorLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserSourceContentFavorLink">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -463,6 +549,15 @@
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="SourceId" ColumnName="SourceId" />
                 <ScalarProperty Name="SourceContentId" ColumnName="SourceContentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserSourceContentFavorLinks">
+            <EntityTypeMapping TypeName="InformationCollection.Models.UserSourceContentFavorLink">
+              <MappingFragment StoreEntitySet="UserSourceContentFavorLink">
+                <ScalarProperty Name="SourceContentId" ColumnName="SourceContentId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserSourceContentFavorLinkId" ColumnName="UserSourceContentFavorLinkId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

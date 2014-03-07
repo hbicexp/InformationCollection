@@ -1,5 +1,6 @@
 ﻿@{
+    ViewBag.Title = "关注信息";
     Layout = "~/Views/Shared/_Content.cshtml";
 }
 
-@Html.Partial("_SourceContents", ViewBag.SourceContents as List<TimiSoft.InformationCollection.Models.UserSourceContent>)
+@Html.Partial("_AllSourceContents", ViewBag.SourceContents as List<TimiSoft.InformationCollection.Models.UserSourceContent>)
