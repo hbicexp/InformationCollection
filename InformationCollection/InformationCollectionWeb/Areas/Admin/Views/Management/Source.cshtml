@@ -4,7 +4,7 @@
 }
 
 <p class="title">
-    源管理
+    任务管理
 </p>
 @{
     var cssClass = new { @class = "btn" };
@@ -14,7 +14,7 @@
 
         <div class="line">
             <a href="@source.Url">@source.SourceName</a>
-            @Html.ActionLink("信息", "Content", "Management", id, cssClass)
+            @Html.ActionLink("消息", "Content", "Management", id, cssClass)
             @Html.ActionLink("采集", "Collect", "Management", id, cssClass)
             @Html.ActionLink("清理", "Clear", "Management", id, cssClass)
         </div>

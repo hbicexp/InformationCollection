@@ -101,7 +101,7 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "已更改你的密码。"
-                : "更改密码";
+                : "";
             return View();
         }
 

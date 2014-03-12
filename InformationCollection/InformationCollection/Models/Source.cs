@@ -18,6 +18,7 @@ namespace TimiSoft.InformationCollection.Models
         {
             this.UserSourceLinks = new HashSet<UserSourceLink>();
             this.SourceContents = new HashSet<SourceContent>();
+            this.SourceUrls = new HashSet<SourceUrl>();
         }
     
         public int SourceId { get; set; }
@@ -26,8 +27,11 @@ namespace TimiSoft.InformationCollection.Models
         public string Url { get; set; }
         public int Interval { get; set; }
         public System.DateTime CreateTime { get; set; }
+        public int Company { get; set; }
+        public int SourceType { get; set; }
     
         public virtual ICollection<UserSourceLink> UserSourceLinks { get; set; }
         public virtual ICollection<SourceContent> SourceContents { get; set; }
+        public virtual ICollection<SourceUrl> SourceUrls { get; set; }
     }
 }

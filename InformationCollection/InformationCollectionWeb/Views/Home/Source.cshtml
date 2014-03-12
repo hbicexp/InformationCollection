@@ -1,20 +1,21 @@
-﻿@model List<TimiSoft.InformationCollection.Models.UserSource>
+﻿@model List<TimiSoft.InformationCollection.Models.SourceView>
 @{
     ViewBag.Title = "采集任务配置";
     Layout = "~/Views/Shared/_Content.cshtml";
 }
 
-@using (Html.BeginForm("Source", "Home", FormMethod.Post, new { id="SourceForm"}))
+@using (Html.BeginForm("Source", "Home", FormMethod.Post, new { id = "SourceForm" }))
 {
+    @Html.AntiForgeryToken()
     <p class="title">
-        <span>源管理 &nbsp;</span>
+        <span>任务管理 &nbsp;</span>
         @Html.TextBox("search", Request["search"], new { id = "Search", style = "width:135px" })
         <button style="font-size:12px; padding:5px 14px" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only action ui-button-text" type="submit">搜索</button>
-        <a id="btnAddSource" style="font-size:12px">添加源</a>
+        <a id="btnAddSource" style="font-size:12px">添加任务</a>
     </p>
     if (Model == null || Model.Count == 0)
     {
-        <p>您还没有添加源。</p>
+        <p>您还没有添加任务。</p>
     }
     else
     {
@@ -25,7 +26,7 @@
                 <p class="line">
                     @userSource.SourceName [@userSource.CreateTime.ToString("yy-MM-dd HH:MM")]
                     <a href="#" onclick="UpdateSource(@userSource.SourceId)" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only action">修改</a>
-                    @Html.ActionLink("删除", "DelSource", "Home", new { id = userSource.SourceId }, new { onclick = "return confirm('您确定要删除该源地址吗？')", @class = "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only action" })
+                    @Html.ActionLink("删除", "DelSource", "Home", new { id = userSource.SourceId }, new { onclick = "return confirm('您确定要删除该任务地址吗？')", @class = "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only action" })
                 </p>
                 <p class="line" style="padding-left:50px;"><a href="@userSource.Url">@userSource.Url</a></p>
             </div>
@@ -55,17 +56,39 @@
     }
 }
 
-@Html.Partial("_AddSource", new TimiSoft.InformationCollection.Models.UserSource())
+@Html.Partial("_AddSource", new TimiSoft.InformationCollection.Models.SourceView())
 <script language="javascript" type="text/javascript">
     $(function () {
+        var tips = $( ".validateTips" );
+        function updateTips( t ) {
+            tips
+              .text( t )
+              .addClass( "ui-state-highlight" );
+            setTimeout(function() {
+                tips.removeClass( "ui-state-highlight", 1500 );
+            }, 500 );
+        }
+
+        function checkLength( o, n, min, max, info ) {
+            if ( o.val().length > max || o.val().length < min ) {
+                //o.addClass( "ui-state-error" );
+                updateTips( info );
+                return false;
+            } else {
+                return true;
+            }
+        }
         $("#dialog-form").dialog({
             autoOpen: false,
-            height: 328,
+            height: 368,
             width: 550,
             modal: true,
             buttons: {
                 "添加": function () {
-                    $("form").submit();
+                    if( checkLength( $("#SourceName"), "SourceName", 3, 300, "采集任务名称应该为3到300字符。")
+                        && checkLength( $("#Url"), "Url", 3, 300, "请输入采集任务地址。"))                    {
+                        $("#addSource").submit();
+                    }
                 },
                 Cancel: function () {
                     $(this).dialog("close");

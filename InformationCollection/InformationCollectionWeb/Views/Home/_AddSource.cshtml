@@ -1,24 +1,35 @@
-﻿@model TimiSoft.InformationCollection.Models.UserSource
-
-<div id="dialog-form" title="添加源">
-    <p class="validateTips">所有字段都需要输入！</p>
-    @using (Ajax.BeginForm("AddSource", "Home", new AjaxOptions { HttpMethod = "Post", OnSuccess = "onSuccess", UpdateTargetId = "SourceList" }))
-    {
-        @Html.HiddenFor(m => m.SourceId);
-        <fieldset>
-            @Html.LabelFor(m => m.SourceName)
-            @Html.TextBoxFor(m => m.SourceName, new { style = "width:500px;" })
-            @Html.LabelFor(m => m.Url)
-            @Html.TextBoxFor(m => m.Url, new { style = "width:500px;" })
-            @Html.LabelFor(m=>m.Interval)
-            @Html.DropDownListFor(m=>m.Interval, new SelectListItem[]{
-           new SelectListItem{Text = "1小时", Value = "1"},
-           new SelectListItem{Text = "2小时", Value = "2"},
-           new SelectListItem{Text = "3小时", Value = "3"},
-           new SelectListItem{Text = "6小时", Value = "6"},
-           new SelectListItem{Text = "12小时", Value = "12"},
-           new SelectListItem{Text = "24小时", Value = "24"},
-       })
-        </fieldset>
+﻿@model TimiSoft.InformationCollection.Models.SourceView
+<style>
+    .ui-dialog .ui-state-error {
+        padding: .3em;
     }
-</div>
+
+    .validateTips {
+        border: 1px solid transparent;
+        padding: 0.3em;
+    }
+</style>
+    <div id="dialog-form" title="添加任务">
+        <p>系统默认会将采集到的1个月内的信息作为最新信息来显示。</p>
+        <p class="validateTips">所有字段都需要输入！</p>
+        @using (Ajax.BeginForm("AddSource", "Home", new AjaxOptions { HttpMethod = "Post", OnSuccess = "onSuccess", UpdateTargetId = "SourceList" }, new { id="addSource" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.SourceId);
+            <div>
+                @Html.LabelFor(m => m.SourceName)
+                @Html.TextBoxFor(m => m.SourceName, new { style = "width:500px;" })
+                @Html.LabelFor(m => m.Url)
+                @Html.TextBoxFor(m => m.Url, new { style = "width:500px;" })
+                @Html.LabelFor(m => m.Interval)
+                @Html.DropDownListFor(m => m.Interval, new SelectListItem[]{
+                   new SelectListItem{Text = "1小时", Value = "1"},
+                   new SelectListItem{Text = "2小时", Value = "2"},
+                   new SelectListItem{Text = "3小时", Value = "3"},
+                   new SelectListItem{Text = "6小时", Value = "6"},
+                   new SelectListItem{Text = "12小时", Value = "12"},
+                   new SelectListItem{Text = "24小时", Value = "24"},
+               })
+            </div>
+        }
+    </div>

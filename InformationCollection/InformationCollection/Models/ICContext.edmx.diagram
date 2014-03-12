@@ -21,6 +21,9 @@
         <EntityTypeShape EntityType="InformationCollection.Models.UserSourceContentFavorLink" Width="1.5" PointX="3" PointY="4.375" />
         <AssociationConnector Association="InformationCollection.Models.FK_UserSourceContentFavorLink_SourceContent" />
         <AssociationConnector Association="InformationCollection.Models.FK_UserSourceContentFavorLink_UserProfile" />
+        <EntityTypeShape EntityType="InformationCollection.Models.Feedback" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="InformationCollection.Models.SourceUrl" Width="1.5" PointX="7.875" PointY="7.875" />
+        <AssociationConnector Association="InformationCollection.Models.FK_SourceUrl_Source" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

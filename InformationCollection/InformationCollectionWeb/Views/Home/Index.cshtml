@@ -1,7 +1,7 @@
 ﻿@{
-    ViewBag.Title = "最新信息";
+    ViewBag.Title = "最新消息";
+    ViewBag.Message = "提示：最新消息为最近1个月的未读信息，如想查看全部信息或者某一网站的所有信息，请点击左侧菜单相应按钮。";
     Layout = "~/Views/Shared/_Content.cshtml";
 }
-
-@Html.Partial("_AllSourceContents", ViewBag.SourceContents as List<TimiSoft.InformationCollection.Models.UserSourceContent>)
+@Html.Partial("_AllSourceContents", ViewBag.SourceContents as List<TimiSoft.InformationCollection.Models.SourceContentView>)
 

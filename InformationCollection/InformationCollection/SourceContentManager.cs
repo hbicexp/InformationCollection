@@ -121,26 +121,30 @@ namespace TimiSoft.InformationCollection
                     return;
                 }
 
-                string response = Utility.RequestHelper.GetResponse(source.Url);
-
-                var regexGroups = context.SourceRegexGroups.Where(p => p.Domain == source.Domain).ToList();
-                if (regexGroups != null && regexGroups.Count > 0)
+                var sourceUrls = context.SourceUrls.Where(p => p.SourceId == source.SourceId && p.Enabled).ToList();
+                foreach (var sourceUrl in sourceUrls)
                 {
-                    List<SourceContentRegexGroup> groupRegexes = new List<SourceContentRegexGroup>();
-                    foreach (var regexGroup in regexGroups)
+                    string response = Utility.RequestHelper.GetResponse(sourceUrl.Url);
+
+                    var regexGroups = context.SourceRegexGroups.Where(p => p.Domain == source.Domain).ToList();
+                    if (regexGroups != null && regexGroups.Count > 0)
                     {
-                        var regexes = regexGroup.SourceRegexes.ToList();
-                        if (regexes.Count > 0)
+                        List<SourceContentRegexGroup> groupRegexes = new List<SourceContentRegexGroup>();
+                        foreach (var regexGroup in regexGroups)
                         {
-                            groupRegexes.Add(new SourceContentRegexGroup(regexGroup.Name, regexGroup.Regex, regexGroup.Decode, regexes));
+                            var regexes = regexGroup.SourceRegexes.ToList();
+                            if (regexes.Count > 0)
+                            {
+                                groupRegexes.Add(new SourceContentRegexGroup(regexGroup.Name, regexGroup.Regex, regexGroup.Decode, regexes));
+                            }
                         }
-                    }
 
-                    Collect(source, userSourceLinks, collectTime, sourceContentType, context, response, groupRegexes);
-                }
-                else
-                {
-                    Collect(source, userSourceLinks, collectTime, sourceContentType, context, response, allGroupRegexes);
+                        Collect(source, userSourceLinks, collectTime, sourceContentType, context, response, groupRegexes);
+                    }
+                    else
+                    {
+                        Collect(source, userSourceLinks, collectTime, sourceContentType, context, response, allGroupRegexes);
+                    }
                 }
             }
         }
@@ -149,6 +153,7 @@ namespace TimiSoft.InformationCollection
         {
             var domain = source.Domain;
             var hrefhead = GetUrlHead(source.Url);
+            var datetime = DateTime.Now.Date.AddMonths(-1);
 
             foreach (var regexGroup in groupRegexes)
             {
@@ -221,12 +226,15 @@ namespace TimiSoft.InformationCollection
                                              Url = url,
                                          };
 
-                                        foreach (var userSouceLink in userSourceLinks)
+                                        if (sourceDate >= datetime)
                                         {
-                                            sourceContent.UserSourceContentLinks.Add(new Models.UserSourceContentLink
+                                            foreach (var userSouceLink in userSourceLinks)
                                             {
-                                                UserId = userSouceLink.UserId
-                                            });
+                                                sourceContent.UserSourceContentLinks.Add(new Models.UserSourceContentLink
+                                                {
+                                                    UserId = userSouceLink.UserId
+                                                });
+                                            }
                                         }
 
                                         context.SourceContents.Add(sourceContent);
@@ -321,18 +329,19 @@ Where P.AddTime<'" + endTime + "'";
             }
         }
 
-        public static IList<Models.UserSourceContent> GetAllSourceContents(string keywords, string province, DateTime beginDate, DateTime endDate, int page, int pageSize, out int count)
+        public static IList<Models.SourceContentView> GetAllSourceContents(int companyId, string keywords, string province, DateTime beginDate, DateTime endDate, int page, int pageSize, out int count)
         {
             using (Models.ICContext context = new Models.ICContext())
             {
                 var query = (from p in context.Sources
                              join q in context.SourceContents
                                  on p.SourceId equals q.SourceId
-                             where (string.IsNullOrEmpty(keywords) || q.Content.Contains(keywords))
+                             where p.Company == companyId 
+                                && (string.IsNullOrEmpty(keywords) || q.Content.Contains(keywords))
                                 && (string.IsNullOrEmpty(province) || p.SourceName.Contains(province))
-                                && q.AddDate >= beginDate && q.AddDate <= endDate
+                                && q.SourceDate >= beginDate && q.SourceDate <= endDate
                              orderby q.AddTime descending, q.SourceDate descending
-                             select new Models.UserSourceContent
+                             select new Models.SourceContentView
                              {
                                  SourceId = p.SourceId,
                                  IsNew = false,
@@ -352,7 +361,7 @@ Where P.AddTime<'" + endTime + "'";
             }
         }
 
-        public static IList<Models.UserSourceContent> GetUserFavorContents(int userId, string keywords, string province, DateTime beginDate, DateTime endDate, int page, int pageSize, out int count)
+        public static IList<Models.SourceContentView> GetUserFavorContents(int companyId, int userId, string keywords, string province, DateTime beginDate, DateTime endDate, int page, int pageSize, out int count)
         {
             using (Models.ICContext context = new Models.ICContext())
             {
@@ -367,11 +376,12 @@ Where P.AddTime<'" + endTime + "'";
                              from rD in rDefault.DefaultIfEmpty()
                              join f in context.UserSourceContentFavorLinks
                                  on new { s.UserId, q.SourceContentId } equals new { f.UserId, f.SourceContentId }
-                             where s.UserId == userId && (string.IsNullOrEmpty(keywords) || q.Content.Contains(keywords))
+                             where p.Company == companyId
+                                && s.UserId == userId && (string.IsNullOrEmpty(keywords) || q.Content.Contains(keywords))
                                 && (string.IsNullOrEmpty(province) || s.SourceName.Contains(province))
-                                && q.AddDate >= beginDate && q.AddDate <= endDate
+                                && q.SourceDate >= beginDate && q.SourceDate <= endDate
                              orderby q.AddDate descending, q.AddHour - (q.AddHour % s.Interval) descending, q.SourceDate descending
-                             select new Models.UserSourceContent
+                             select new Models.SourceContentView
                              {
                                  SourceId = p.SourceId,
                                  IsNew = rD != null,
@@ -391,7 +401,7 @@ Where P.AddTime<'" + endTime + "'";
             }
         }
 
-        public static IList<Models.UserSourceContent> GetUserUnReadContents(int userId, string keywords, string province, DateTime beginDate, DateTime endDate, int page, int pageSize, out int count)
+        public static IList<Models.SourceContentView> GetUserUnReadContents(int companyId, int userId, string keywords, string province, DateTime beginDate, DateTime endDate, int page, int pageSize, out int count)
         {
             using (Models.ICContext context = new Models.ICContext())
             {
@@ -406,12 +416,13 @@ Where P.AddTime<'" + endTime + "'";
                                  on new { s.UserId, q.SourceContentId } equals new { f.UserId, f.SourceContentId }
                              into fDefault
                              from fD in fDefault.DefaultIfEmpty()
-                             where s.UserId == userId
+                             where p.Company == companyId
+                                && s.UserId == userId
                                 && (string.IsNullOrEmpty(keywords) || q.Content.Contains(keywords))
                                 && (string.IsNullOrEmpty(province) || s.SourceName.Contains(province))
-                                && q.AddDate >= beginDate && q.AddDate <= endDate
+                                && q.SourceDate >= beginDate && q.SourceDate <= endDate
                              orderby q.AddDate descending, q.AddHour - (q.AddHour % s.Interval) descending, q.SourceDate descending
-                             select new Models.UserSourceContent
+                             select new Models.SourceContentView
                              {
                                  SourceId = p.SourceId,
                                  IsNew = true,
@@ -431,7 +442,7 @@ Where P.AddTime<'" + endTime + "'";
             }
         }
 
-        public static IList<Models.UserSourceContent> GetUserSourceContents(int userId, string keywords, string province, DateTime beginDate, DateTime endDate, int page, int pageSize, out int count)
+        public static IList<Models.SourceContentView> GetUserSourceContents(int companyId, int userId, string keywords, string province, DateTime beginDate, DateTime endDate, int page, int pageSize, out int count)
         {
             using (Models.ICContext context = new Models.ICContext())
             {
@@ -448,11 +459,12 @@ Where P.AddTime<'" + endTime + "'";
                                  on new { s.UserId, q.SourceContentId } equals new { f.UserId, f.SourceContentId }
                              into fDefault
                              from fD in fDefault.DefaultIfEmpty()
-                             where s.UserId == userId
-                                  && (string.IsNullOrEmpty(keywords) || q.Content.Contains(keywords))
-                                && q.AddDate >= beginDate && q.AddDate <= endDate
+                             where p.Company == companyId
+                                && s.UserId == userId
+                                && (string.IsNullOrEmpty(keywords) || q.Content.Contains(keywords))
+                                && q.SourceDate >= beginDate && q.SourceDate <= endDate
                              orderby q.AddDate descending, q.AddHour - (q.AddHour % s.Interval) descending, q.SourceDate descending
-                             select new Models.UserSourceContent
+                             select new Models.SourceContentView
                              {
                                  SourceId = p.SourceId,
                                  IsFavor = fD != null,
@@ -472,7 +484,7 @@ Where P.AddTime<'" + endTime + "'";
             }
         }
 
-        public static IList<Models.UserSourceContent> GetUserSourceContents(int userId, int sourceId, string keywords, DateTime beginDate, DateTime endDate, int page, int pageSize, out int count)
+        public static IList<Models.SourceContentView> GetUserSourceContents(int companyId, int userId, int sourceId, string keywords, DateTime beginDate, DateTime endDate, int page, int pageSize, out int count)
         {
             using (Models.ICContext context = new Models.ICContext())
             {
@@ -489,11 +501,12 @@ Where P.AddTime<'" + endTime + "'";
                                  on new { s.UserId, q.SourceContentId } equals new { f.UserId, f.SourceContentId }
                              into fDefault
                              from fD in fDefault.DefaultIfEmpty()
-                             where s.UserId == userId && p.SourceId == sourceId
+                             where p.Company == companyId
+                                  && s.UserId == userId && p.SourceId == sourceId
                                   && (string.IsNullOrEmpty(keywords) || q.Content.Contains(keywords))
-                                && q.AddDate >= beginDate && q.AddDate <= endDate
+                                && q.SourceDate >= beginDate && q.SourceDate <= endDate
                              orderby q.AddDate descending, q.AddHour - (q.AddHour % s.Interval) descending, q.SourceDate descending
-                             select new Models.UserSourceContent
+                             select new Models.SourceContentView
                              {
                                  SourceId = p.SourceId,
                                  IsFavor = fD != null,

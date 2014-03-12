@@ -1,4 +1,4 @@
-﻿html, body, form, header, footer, hgroup, nav, section, ul, fieldset {
+﻿html, body, form, #header, #footer, ul, div {
     margin: 0;
     padding: 0;
 }
@@ -11,7 +11,7 @@ body {
     background-color: #f0f0f0;
 }
 
-header, footer, hgroup, nav, section {
+#header, #footer {
     display: block;
 }
 
@@ -120,13 +120,13 @@ button {
     max-width: 860px;
 }
 
-header {
+#header {
     border-top: solid 1px #666;
     background-color: #278dd0;
     /*background:-webkit-gradient(linear, 0 0, 0 bottom, from(#ffffff), to(#ef7b23));*/
 }
 
-    header .content {
+    #header .content {
         background-color: #3598d8;
         max-width: 880px;
         padding: 12px 40px 0px 20px;
@@ -146,11 +146,11 @@ header {
         border-right: solid 1px #e3e3e3;
     }
 
-footer {
+#footer {
     border-top: solid 1px #e3e3e3;
 }
 
-    footer .content {
+    #footer .content {
         font-size: 1em;
         background-color: #ffffff;
         padding: 30px 40px;
@@ -166,7 +166,8 @@ footer {
     padding: 4px;
 }
     .source .nav {
-        box-shadow: 1px 0px 2px rgba(0,0,0,0.5);
+        background-color:#fff;
+        box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
 
     .source a {
@@ -219,25 +220,25 @@ footer {
     }
 
     .source .submenu-icon {
-        font-family: 'FontAwesome';
         font-size: 14px;
-        font-weight:bold;
         float: right;
-        padding:10px;
-        margin:-8px -8px 0 0;
+        padding:7px 8px;
         width:12px;
+        height:20px;
     }
 
     .source .submenu-icon:hover {
         background-color: #68c6d2;
     }
 
+    .source .submenu-link {
+        _float:right;
+    }
+
     .source .up:before {
-        content: "-";
     }
 
     .source .down:before {
-        content: "+";
     }
 
 .sourcecontent {
@@ -245,17 +246,14 @@ footer {
     width: 722px;
     min-height: 500px;
     padding: 4px;
-    line-height: 1.5;
 }
-
     .sourcecontent .search {
-        padding: 0px;
-        margin: 0px;
     }
-
-        .sourcecontent .search button {
+        .sourcecontent .search .button {
+            display:inline-block;
             font-weight: bold;
-            padding: 6px 15px 6px 15px;
+            padding: 5px 15px 6px 15px;
+            padding: 5px 15px 6px 15px\9; 
             text-align: center;
             border: 1px solid #f8caa8;
             cursor: pointer;
@@ -266,12 +264,12 @@ footer {
         }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-    .sourcecontent .search button {
-        padding: 7px 15px 5px 15px;
+    .sourcecontent .search .button {
+        padding: 6px 15px 5px 15px;
     }
 }
 
-.sourcecontent .search button:hover {
+.sourcecontent .search .button:hover {
     background: #fce3d0;
 }
 
@@ -298,6 +296,7 @@ footer {
 }
 
 .sourcecontent .title {
+    clear:both;
     font-size: 1em;
     font-weight:bold;
     padding: 5px 20px 3px 16px;
@@ -305,9 +304,11 @@ footer {
     border-bottom: 1px solid #e3e3e3;
     background-color: #f8f8f8;
     margin: 2px 0px 2px 0px;
+    line-height: 1.5;
 }
 
 .sourcecontent .line {
+    line-height: 1.5;
     margin: 0px;
     padding: 4px 15px;
     border-bottom: 1px solid #f8f8f8;
@@ -393,6 +394,11 @@ footer {
 
 /* login
 ----------------------------------------------------------*/
+
+.account{
+    line-height:32px;
+}
+
 #login {
     color: #ffffff;
     display: block;
@@ -435,24 +441,26 @@ footer {
 
 
 /* page titles */
-hgroup.title {
-    padding-bottom: 2px;
-    margin-bottom: 6px;
-    border-bottom: solid 1px #e3e3e3;
+#hgroup {
+    margin-bottom: 16px;
 }
 
-    hgroup.title h1, hgroup.title h2 {
-        display: inline;
-    }
+#hgroup .title {
+    padding-bottom: 2px;
+    border-bottom: solid 1px #e3e3e3;
+    margin-bottom: 6px;
+}
 
-    hgroup.title h2 {
-        font-weight: normal;
-        margin-left: 3px;
-    }
+#hgroup .heading {
+    padding-bottom: 2px;
+    display: inline;
+    margin-left: 3px;
+}
 
-    hgroup.title h3 {
-        margin-left: 10px;
-    }
+#hgroup h3 {
+    margin-left: 10px;
+    margin-bottom: 2px;
+}
 
 /* login page */
 #loginForm {

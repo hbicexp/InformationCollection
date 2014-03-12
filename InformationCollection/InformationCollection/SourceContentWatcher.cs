@@ -96,27 +96,34 @@ namespace TimiSoft.InformationCollection
             try
             {
                 SourceContentManager.ReloadSourceRegexes();
-
                 var watchedSources = this.GetWatchedSources();
                 foreach (var source in watchedSources)
                 {
-                    this.log.Info("Collect info for " + source.Url);
-                    SourceContentManager.Collect(source, collectTime, SourceContentType.Content);
+                    switch(source.SourceType)
+                    {
+                        case 1:
+                            this.log.Info("Collect info for " + source.Url);
+                            SourceContentManager.Collect(source, collectTime, SourceContentType.Content);
+                            break;
+                        default:
+                            this.log.Info("Ignore for " + source.Url);
+                            break;
+                    }
                 }
 
-                this.WatchedSources.AddRange(watchedSources);
-                for (int i = this.WatchedSources.Count - 1; i >= 0; i--)
-                {
-                    var source = this.WatchedSources[i];
-                    if (source.Interval == 1)
-                    {
-                        this.WatchedSources.RemoveAt(i);
-                    }
-                    else
-                    {
-                        source.Interval -= 1;
-                    }
-                }
+                //this.WatchedSources.AddRange(watchedSources);
+                //for (int i = this.WatchedSources.Count - 1; i >= 0; i--)
+                //{
+                //    var source = this.WatchedSources[i];
+                //    if (source.Interval == 1)
+                //    {
+                //        this.WatchedSources.RemoveAt(i);
+                //    }
+                //    else
+                //    {
+                //        source.Interval -= 1;
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -132,10 +139,10 @@ namespace TimiSoft.InformationCollection
             using (Models.ICContext context = new Models.ICContext())
             {
                 return (from p in context.Sources.Where(p => p.Interval > 0).ToList()
-                                     join q in this.WatchedSources
-                                     on p.SourceId equals q.SourceId into watchedSourcesDefault
-                                     from r in watchedSourcesDefault.DefaultIfEmpty()
-                                     where r == null
+                                     //join q in this.WatchedSources
+                                     //on p.SourceId equals q.SourceId into watchedSourcesDefault
+                                     //from r in watchedSourcesDefault.DefaultIfEmpty()
+                                     //where r == null
                                      select p).ToList();
             }
         }

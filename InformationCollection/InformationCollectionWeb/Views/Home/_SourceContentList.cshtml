@@ -1,7 +1,16 @@
-﻿@model List<TimiSoft.InformationCollection.Models.UserSourceContent>
+﻿@model List<TimiSoft.InformationCollection.Models.SourceContentView>
+<div style="clear:both; padding:3px 16px;">
+    <a class="message unread" style="float:none; display:inline-block;">&nbsp;</a> 为未读的消息&nbsp;&nbsp;&nbsp;&nbsp;
+    <a class="flag favor" style="float: none; display: inline-block; ">&nbsp;</a> 为关注的消息&nbsp;&nbsp;&nbsp;&nbsp;
+    <span style="float: none; display: inline-block; ">@ViewBag.Message</span>
+</div>
 @if (Model == null || Model.Count == 0)
 {
-    <p>暂时没有新的信息！</p>
+    <p>暂时没有新的消息！</p>
+    if (Request["search"] == "" && Request["begindate"] == "" && Request["begindate"] == "")
+    {
+        <p>如果该网站无法正常采集，请与管理员联系！</p>
+    }
 }
 else
 {

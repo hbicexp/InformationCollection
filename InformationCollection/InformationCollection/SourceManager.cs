@@ -12,11 +12,11 @@ namespace TimiSoft.InformationCollection
     {
         public static Regex DomainRegex = new Regex("http[s]*://[^/]*/");
 
-        public static void AddSource(int userId, Models.UserSource userSource)
+        public static void AddSource(int company, int userId, Models.SourceView userSource)
         {
             if (string.IsNullOrEmpty(userSource.SourceName) || string.IsNullOrEmpty(userSource.Url))
             {
-                throw new ArgumentException("源名称和源地址不能为空！");
+                throw new ArgumentException("任务名称和任务地址不能为空！");
             }
 
             if (!(userSource.Url.StartsWith("http://") || userSource.Url.StartsWith("https://")))
@@ -29,11 +29,7 @@ namespace TimiSoft.InformationCollection
                 if (userSource.SourceId > 0)
                 {
                     var sourceInDB = context.UserSourceLinks.Where(p => p.UserId == userId && p.SourceId == userSource.SourceId).FirstOrDefault();
-                    if (sourceInDB == null)
-                    {
-                        return;
-                    }
-                    else
+                    if (sourceInDB != null)
                     {
                         sourceInDB.SourceName = userSource.SourceName;
                         sourceInDB.Interval = userSource.Interval;
@@ -53,7 +49,14 @@ namespace TimiSoft.InformationCollection
                             Domain = GetDomain(userSource.Url),
                             Interval = userSource.Interval,
                             CreateTime = DateTime.Now,
+                            Company = company,
+                            SourceType = 1
                         };
+
+                        source.SourceUrls.Add(new Models.SourceUrl { 
+                             Url = userSource.Url, 
+                             Enabled = true
+                        });
 
                         source.UserSourceLinks.Add(new Models.UserSourceLink()
                         {
@@ -64,6 +67,7 @@ namespace TimiSoft.InformationCollection
                             CreateTime = DateTime.Now,
                             UpdateTime = DateTime.Now
                         });
+
                         context.Sources.Add(source);
                         context.SaveChanges();
 
@@ -76,7 +80,7 @@ namespace TimiSoft.InformationCollection
                         userSourceLinkInDB = sourceInDB.UserSourceLinks.Where(p => p.UserId == userId).FirstOrDefault();
                         if (userSourceLinkInDB == null)
                         {
-                            sourceInDB.UserSourceLinks.Add(new Models.UserSourceLink()
+                            userSourceLinkInDB = new Models.UserSourceLink()
                             {
                                 SourceName = userSource.SourceName,
                                 Interval = userSource.Interval,
@@ -84,10 +88,12 @@ namespace TimiSoft.InformationCollection
                                 UserId = userId,
                                 CreateTime = DateTime.Now,
                                 UpdateTime = DateTime.Now
-                            });
+                            };
+                            sourceInDB.UserSourceLinks.Add(userSourceLinkInDB);
+                            context.SaveChanges();
 
-                            var queryDate = DateTime.Now.AddDays(-1);
-                            var sourceCotents = context.SourceContents.Where(p => p.SourceId == userSource.SourceId && p.AddTime >= queryDate).ToList();
+                            var queryDate = DateTime.Now.Date.AddMonths(-1);
+                            var sourceCotents = context.SourceContents.Where(p => p.SourceId == sourceInDB.SourceId && p.SourceDate >= queryDate).ToList();
                             if (sourceCotents.Count > 0)
                             {
                                 foreach (var sourceContent in sourceCotents)
@@ -119,7 +125,7 @@ namespace TimiSoft.InformationCollection
             }
         }
 
-        public static List<Models.UserSource> GetSourceList(int userId, string search, int page, int pageSize, out int count)
+        public static List<Models.SourceView> GetSourceList(int userId, string search, int page, int pageSize, out int count)
         {
             using (Models.ICContext context = new Models.ICContext())
             {
@@ -129,7 +135,7 @@ namespace TimiSoft.InformationCollection
                         where q.UserId == userId && 
                         (String.IsNullOrEmpty(search) || q.SourceName.Contains(search))
                         orderby q.SourceName
-                        select new Models.UserSource
+                        select new Models.SourceView
                         {
                             SourceId = p.SourceId,
                             SourceName = q.SourceName,
@@ -150,7 +156,7 @@ namespace TimiSoft.InformationCollection
             }
         }
 
-        public static List<Models.UserSource> GetSourceList(int userId)
+        public static List<Models.SourceView> GetSourceList(int userId)
         {
             using (Models.ICContext context = new Models.ICContext())
             {
@@ -159,7 +165,7 @@ namespace TimiSoft.InformationCollection
                              on p.SourceId equals q.SourceId
                              where q.UserId == userId 
                              orderby q.SourceName
-                             select new Models.UserSource
+                             select new Models.SourceView
                              {
                                  SourceId = p.SourceId,
                                  SourceName = q.SourceName,

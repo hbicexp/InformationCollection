@@ -5,11 +5,25 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="InformationCollection.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="FeedbackId" />
+          </Key>
+          <Property Name="FeedbackId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="SourceId" Type="int" Nullable="false" />
+          <Property Name="Content" Type="nvarchar" MaxLength="4000" />
+          <Property Name="SubmitTime" Type="datetime" Nullable="false" />
+          <Property Name="Response" Type="nvarchar" MaxLength="4000" />
+          <Property Name="ResponseTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="Source">
           <Key>
             <PropertyRef Name="SourceId" />
           </Key>
           <Property Name="SourceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Company" Type="int" Nullable="false" />
+          <Property Name="SourceType" Type="int" Nullable="false" />
           <Property Name="SourceName" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="Domain" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="Url" Type="nvarchar" MaxLength="4000" Nullable="false" />
@@ -51,6 +65,15 @@
           <Property Name="Regex" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="Enabled" Type="bit" Nullable="false" />
           <Property Name="Decode" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SourceUrl">
+          <Key>
+            <PropertyRef Name="SourceUrlId" />
+          </Key>
+          <Property Name="SourceUrlId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SourceId" Type="int" Nullable="false" />
+          <Property Name="Url" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="UserProfile">
           <Key>
@@ -108,6 +131,18 @@
             </Principal>
             <Dependent Role="SourceRegex">
               <PropertyRef Name="SourceRegexGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SourceUrl_Source">
+          <End Role="Source" Type="Self.Source" Multiplicity="1" />
+          <End Role="SourceUrl" Type="Self.SourceUrl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Source">
+              <PropertyRef Name="SourceId" />
+            </Principal>
+            <Dependent Role="SourceUrl">
+              <PropertyRef Name="SourceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -184,10 +219,12 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="InformationCollectionModelsStoreContainer">
+          <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Source" EntityType="Self.Source" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SourceContent" EntityType="Self.SourceContent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SourceRegex" EntityType="Self.SourceRegex" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SourceRegexGroup" EntityType="Self.SourceRegexGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SourceUrl" EntityType="Self.SourceUrl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserSourceContentFavorLink" EntityType="Self.UserSourceContentFavorLink" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserSourceContentLink" EntityType="Self.UserSourceContentLink" Schema="dbo" store:Type="Tables" />
@@ -199,6 +236,10 @@
           <AssociationSet Name="FK_SourceRegex_SourceRegexGroup" Association="Self.FK_SourceRegex_SourceRegexGroup">
             <End Role="SourceRegexGroup" EntitySet="SourceRegexGroup" />
             <End Role="SourceRegex" EntitySet="SourceRegex" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SourceUrl_Source" Association="Self.FK_SourceUrl_Source">
+            <End Role="Source" EntitySet="Source" />
+            <End Role="SourceUrl" EntitySet="SourceUrl" />
           </AssociationSet>
           <AssociationSet Name="FK_UserSourceContentFavorLink_SourceContent" Association="Self.FK_UserSourceContentFavorLink_SourceContent">
             <End Role="SourceContent" EntitySet="SourceContent" />
@@ -269,6 +310,12 @@
           <AssociationSet Name="FK_UserSourceContentFavorLink_UserProfile" Association="InformationCollection.Models.FK_UserSourceContentFavorLink_UserProfile">
             <End Role="UserProfile" EntitySet="UserProfiles" />
             <End Role="UserSourceContentFavorLink" EntitySet="UserSourceContentFavorLinks" />
+          </AssociationSet>
+          <EntitySet Name="Feedbacks" EntityType="InformationCollection.Models.Feedback" />
+          <EntitySet Name="SourceUrls" EntityType="InformationCollection.Models.SourceUrl" />
+          <AssociationSet Name="FK_SourceUrl_Source" Association="InformationCollection.Models.FK_SourceUrl_Source">
+            <End Role="Source" EntitySet="Sources" />
+            <End Role="SourceUrl" EntitySet="SourceUrls" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="SourceRegex">
@@ -351,6 +398,9 @@
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="UserSourceLinks" Relationship="InformationCollection.Models.FK_UserSourceLink_Source" FromRole="Source" ToRole="UserSourceLink" />
           <NavigationProperty Name="SourceContents" Relationship="InformationCollection.Models.FK_SourceContent_Source" FromRole="Source" ToRole="SourceContent" />
+          <Property Name="Company" Type="Int32" Nullable="false" />
+          <Property Name="SourceType" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SourceUrls" Relationship="InformationCollection.Models.FK_SourceUrl_Source" FromRole="Source" ToRole="SourceUrl" />
         </EntityType>
         <EntityType Name="UserSourceLink">
           <Key>
@@ -465,6 +515,40 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="FeedbackId" />
+          </Key>
+          <Property Name="FeedbackId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="SourceId" Type="Int32" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="SubmitTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Response" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="ResponseTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SourceUrl">
+          <Key>
+            <PropertyRef Name="SourceUrlId" />
+          </Key>
+          <Property Name="SourceUrlId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SourceId" Type="Int32" Nullable="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Source" Relationship="InformationCollection.Models.FK_SourceUrl_Source" FromRole="SourceUrl" ToRole="Source" />
+        </EntityType>
+        <Association Name="FK_SourceUrl_Source">
+          <End Type="InformationCollection.Models.Source" Role="Source" Multiplicity="1" />
+          <End Type="InformationCollection.Models.SourceUrl" Role="SourceUrl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Source">
+              <PropertyRef Name="SourceId" />
+            </Principal>
+            <Dependent Role="SourceUrl">
+              <PropertyRef Name="SourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -515,6 +599,8 @@
           <EntitySetMapping Name="Sources">
             <EntityTypeMapping TypeName="InformationCollection.Models.Source">
               <MappingFragment StoreEntitySet="Source">
+                <ScalarProperty Name="SourceType" ColumnName="SourceType" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="Interval" ColumnName="Interval" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
@@ -558,6 +644,29 @@
                 <ScalarProperty Name="SourceContentId" ColumnName="SourceContentId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="UserSourceContentFavorLinkId" ColumnName="UserSourceContentFavorLinkId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feedbacks">
+            <EntityTypeMapping TypeName="InformationCollection.Models.Feedback">
+              <MappingFragment StoreEntitySet="Feedback">
+                <ScalarProperty Name="ResponseTime" ColumnName="ResponseTime" />
+                <ScalarProperty Name="Response" ColumnName="Response" />
+                <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="SourceId" ColumnName="SourceId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FeedbackId" ColumnName="FeedbackId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SourceUrls">
+            <EntityTypeMapping TypeName="InformationCollection.Models.SourceUrl">
+              <MappingFragment StoreEntitySet="SourceUrl">
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="SourceId" ColumnName="SourceId" />
+                <ScalarProperty Name="SourceUrlId" ColumnName="SourceUrlId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -166,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AuthConfig.cs" />
+    <Compile Include="App_Start\BaseConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -191,6 +192,7 @@
     <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\images\animated-overlay.gif" />
     <Content Include="Content\sigin.css" />
+    <Content Include="Content\site.css" />
     <Content Include="Images\flag.jpg" />
     <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\images\ui-bg_flat_55_fbec88_40x100.png" />
@@ -316,7 +318,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\site.css" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Images\bullet.png" />
     <Content Include="Images\orderedList0.png" />

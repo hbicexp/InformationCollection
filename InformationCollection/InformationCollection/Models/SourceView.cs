@@ -10,17 +10,17 @@ namespace TimiSoft.InformationCollection.Models
     /// <summary>
     /// User Source class
     /// </summary>
-    public class UserSource
+    public class SourceView
     {
         [Display(Name = "编号")]
         public int SourceId { get; set; }
         
         [Required]
-        [Display(Name = "源名称")]
+        [Display(Name = "任务名称")]
         public string SourceName { get; set; }
 
         [Required]
-        [Display(Name = "源地址")]
+        [Display(Name = "任务地址")]
         public string Url { get; set; }
 
         [Display(Name = "添加时间")]

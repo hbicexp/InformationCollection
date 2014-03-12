@@ -1,11 +1,12 @@
-﻿@model List<TimiSoft.InformationCollection.Models.UserSourceContent>
+﻿@model List<TimiSoft.InformationCollection.Models.SourceContentView>
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     <div class="search">
-        <b>关键字：</b>@Html.TextBox("search", Request["search"], new { id = "Search" })
-        <b>省份：</b>@Html.TextBox("province", Request["province"], new { id = "Province" })
-        <b>日期：</b>@Html.TextBox("begindate", Request["BeginDate"], new { id = "BeginDate" })
-        <b>到</b> @Html.TextBox("enddate", Request["EndDate"], new { id = "EndDate" })<button class="btn" type="submit">搜索</button>
+        <span>关键字：</span>@Html.TextBox("search", Request["search"], new { id = "Search" })
+        <span>省份：</span>@Html.TextBox("province", Request["province"], new { id = "Province" })
+        <span>日期：</span>@Html.TextBox("begindate", Request["BeginDate"], new { id = "BeginDate" })
+        <span>到</span> @Html.TextBox("enddate", Request["EndDate"], new { id = "EndDate" })<a id="SubSearch" class="button">搜索</a>
     </div>
 
     @Html.Partial("_SourceContentList", Model)
@@ -15,5 +16,8 @@
     $(function () {
         $("#BeginDate").datepicker();
         $("#EndDate").datepicker();
+        $("#SubSearch").click(function () {
+            $("Form").submit();
+        });
     });
 </script>

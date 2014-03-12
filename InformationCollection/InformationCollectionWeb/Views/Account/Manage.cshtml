@@ -1,13 +1,16 @@
 ﻿@model TimiSoft.InformationCollectionWeb.Models.LocalPasswordModel
 @{
-    ViewBag.Title = "管理帐户";
+    ViewBag.Title = "更改密码";
     ViewBag.Selected = "Account";
 }
 
-<section id="loginForm">
+<div id="loginForm">
 
+    <div id="hgroup">
+        <h1 class="title">@ViewBag.Title.</h1>
+        <h3 class="heading">你已使用 <strong>@User.Identity.Name</strong> 身份登录。</h3>
+    </div>
 
-    <p>你已使用 <strong>@User.Identity.Name</strong>. 身份登录。</p>
     <h3>@ViewBag.StatusMessage</h3>
 
     @using (Html.BeginForm("Manage", "Account"))
@@ -15,9 +18,8 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
-        <fieldset>
-            <legend>“更改密码”表单</legend>
-            <ol>
+        <div class="account">
+            <ul>
                 <li>
                     @Html.LabelFor(m => m.OldPassword)
                     @Html.PasswordFor(m => m.OldPassword)
@@ -30,17 +32,17 @@
                     @Html.LabelFor(m => m.ConfirmPassword)
                     @Html.PasswordFor(m => m.ConfirmPassword)
                 </li>
-            </ol>
+            </ul>
             <input type="submit" id="ChangePassword" value="更改密码" />
-        </fieldset>
+        </div>
     }
 
-</section>
+</div>
 
-<section class="social" id="socialLoginForm" style="width:240px;">
+<div class="social" id="socialLoginForm" style="width:240px;">
     <h3>请牢记您的密码并定期修改。</h3>
     <h3>@Html.ActionLink("返回首页", "Index", "Home", null, new { id = "BackToHome", @class = "btn" })</h3>
-</section>
+</div>
 
 <script language="javascript" type="text/javascript">
     $(function () {

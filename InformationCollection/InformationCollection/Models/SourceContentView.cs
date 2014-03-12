@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TimiSoft.InformationCollection.Models
 {
-    public class UserSourceContent
+    public class SourceContentView
     {
         public int SourceId { get; set; }
         public string Content { get; set; }

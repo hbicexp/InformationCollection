@@ -3,7 +3,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - 信息采集系统</title>
+    <meta name="renderer" content="webkit">
+    <title>@ViewBag.Title - 消息采集系统</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
     <link href="~/Content/site.css" rel="stylesheet" />
@@ -14,7 +15,7 @@
     @RenderSection("scripts", required: false)
 </head>
 <body>
-    <header>
+    <div id="header">
         <div class="content">
             <div class="float-left">
                 <a href="http://www.cbtgc.com/"><img src="~/Images/logo.jpg" /></a>
@@ -23,23 +24,23 @@
                 <p class="site-title"><a href="/">信息采集系统</a></p>
             </div>
             <div class="float-right">
-                <section id="login">
+                <div id="login">
                     @Html.Partial("_LoginPartial")
-                </section>
+                </div>
             </div>
         </div>
-    </header>
+    </div>
     <div id="body">
         <div class="content clear-fix">
             @RenderBody()
         </div>
     </div>
-    <footer>
+    <div id="footer">
         <div class="content">
             <div class="float-left">
                 <p>版权所有：<a href="http://www.cbtgc.com/">中国建筑技术集团有限公司</a>&copy; @DateTime.Now.Year - 信息采集系统</p>
             </div>
         </div>
-    </footer>
+    </div>
 </body>
 </html>

@@ -9,15 +9,6 @@ using System.Web.Security;
 
 namespace TimiSoft.InformationCollectionWeb.Models
 {
-    public class RegisterExternalLoginModel
-    {
-        [Required]
-        [Display(Name = "用户名")]
-        public string UserName { get; set; }
-
-        public string ExternalLoginData { get; set; }
-    }
-
     public class LocalPasswordModel
     {
         [Required]
@@ -68,12 +59,5 @@ namespace TimiSoft.InformationCollectionWeb.Models
         [Display(Name = "确认密码")]
         [Compare("Password", ErrorMessage = "密码和确认密码不匹配。")]
         public string ConfirmPassword { get; set; }
-    }
-
-    public class ExternalLogin
-    {
-        public string Provider { get; set; }
-        public string ProviderDisplayName { get; set; }
-        public string ProviderUserId { get; set; }
     }
 }

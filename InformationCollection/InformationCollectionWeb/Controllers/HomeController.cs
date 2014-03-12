@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Microsoft.Web.WebPages.OAuth;
 using TimiSoft.InformationCollection;
 using TimiSoft.InformationCollection.Models;
+using TimiSoft.InformationCollectionWeb.App_Start;
 using TimiSoft.InformationCollectionWeb.Models;
 using WebMatrix.WebData;
 
@@ -15,7 +16,7 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
     [Authorize]
     public class HomeController : BaseController
     {
-        private UserProfile userProfile;
+        private static DateTime queryDate = new DateTime(2014, 1, 1);
 
         protected override void OnAuthorization(AuthorizationContext filterContext)
         {
@@ -23,7 +24,6 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                this.userProfile = this.GetUser();
                 this.ViewBag.Sources = this.GetSources();
             }
         }
@@ -40,11 +40,12 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
 
         public ActionResult Index()
         {
-            QueryModel query = this.GetQueryModel();
-            int count = 0;
+            var userProfile = this.GetUser();
+            var query = this.GetQueryModel();
+            var count = 0;
 
             ViewBag.Selected = "Index";
-            ViewBag.SourceContents = SourceContentManager.GetUserUnReadContents(this.userProfile.UserId, query.search, query.province, query.beginDate, query.endDate, query.page, query.pageSize, out count);
+            ViewBag.SourceContents = SourceContentManager.GetUserUnReadContents(BaseConfig.Company, userProfile.UserId, query.search, query.province, query.beginDate, query.endDate, query.page, query.pageSize, out count);
             ViewBag.PageCount = 1 + (count - 1) / query.pageSize;
             ViewBag.PageIndex = query.page;
             return View();
@@ -52,11 +53,11 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
 
         public ActionResult All()
         {
-            QueryModel query = this.GetQueryModel();
-            int count = 0;
+            var query = this.GetQueryModel();
+            var count = 0;
 
             ViewBag.Selected = "All";
-            ViewBag.SourceContents = SourceContentManager.GetAllSourceContents(query.search, query.province, query.beginDate, query.endDate, query.page, query.pageSize, out count);
+            ViewBag.SourceContents = SourceContentManager.GetAllSourceContents(BaseConfig.Company, query.search, query.province, query.beginDate, query.endDate, query.page, query.pageSize, out count);
             ViewBag.PageCount = 1 + (count - 1) / query.pageSize;
             ViewBag.PageIndex = query.page;
             return View();
@@ -64,11 +65,12 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
 
         public ActionResult UserAll()
         {
-            QueryModel query = this.GetQueryModel();
-            int count = 0;
+            var userProfile = this.GetUser();
+            var query = this.GetQueryModel();
+            var count = 0;
 
             ViewBag.Selected = "UserAll";
-            ViewBag.SourceContents = SourceContentManager.GetUserSourceContents(this.userProfile.UserId, query.search, query.province, query.beginDate, query.endDate, query.page, query.pageSize, out count);
+            ViewBag.SourceContents = SourceContentManager.GetUserSourceContents(BaseConfig.Company, userProfile.UserId, query.search, query.province, query.beginDate, query.endDate, query.page, query.pageSize, out count);
             ViewBag.PageCount = 1 + (count - 1) / query.pageSize;
             ViewBag.PageIndex = query.page;
             return View();
@@ -76,11 +78,12 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
 
         public ActionResult Favor()
         {
-            QueryModel query = this.GetQueryModel();
-            int count = 0;
+            var userProfile = this.GetUser();
+            var query = this.GetQueryModel();
+            var count = 0;
 
             ViewBag.Selected = "Favor";
-            ViewBag.SourceContents = SourceContentManager.GetUserFavorContents(this.userProfile.UserId, query.search, query.province, query.beginDate, query.endDate, query.page, query.pageSize, out count);
+            ViewBag.SourceContents = SourceContentManager.GetUserFavorContents(BaseConfig.Company, userProfile.UserId, query.search, query.province, query.beginDate, query.endDate, query.page, query.pageSize, out count);
             ViewBag.PageCount = 1 + (count - 1) / query.pageSize;
             ViewBag.PageIndex = query.page;
             return View();
@@ -94,11 +97,12 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
                 return this.HttpNotFound();
             }
 
-            QueryModel query = this.GetQueryModel();
-            int count = 0;
+            var userProfile = this.GetUser();
+            var query = this.GetQueryModel();
+            var count = 0;
 
             ViewBag.Selected = source.SourceName;
-            ViewBag.SourceContents = SourceContentManager.GetUserSourceContents(this.userProfile.UserId, id, query.search, query.beginDate, query.endDate, query.page, query.pageSize, out count);
+            ViewBag.SourceContents = SourceContentManager.GetUserSourceContents(BaseConfig.Company, userProfile.UserId, id, query.search, query.beginDate, query.endDate, query.page, query.pageSize, out count);
             ViewBag.PageCount = 1 + (count - 1) / query.pageSize;
             ViewBag.PageIndex = query.page;
             return View();
@@ -106,10 +110,10 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
 
         private QueryModel GetQueryModel()
         {
-            QueryModel query = new QueryModel();
-
+            var query = new QueryModel();
             var p = Request["page"];
-            int page = 0;
+            var page = 0;
+
             if (p != null) { int.TryParse(p, out page); }
             if (page == 0) { page = 1; }
             query.page = page;
@@ -120,14 +124,14 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
             var sBeginData = Request["begindate"];
             var sEndData = Request["enddate"];
             DateTime beginDate;
-            DateTime endDate = DateTime.Now.Date.AddDays(1);
+            DateTime endDate;
             if (DateTime.TryParse(sBeginData, out beginDate) && beginDate < DateTime.Now.Date)
             {
-                query.beginDate = beginDate;
+                query.beginDate = beginDate > queryDate ? beginDate : queryDate;
             }
             else
             {
-                query.beginDate = new DateTime(2014, 1, 1);
+                query.beginDate = queryDate;
             }
 
             if (DateTime.TryParse(sEndData, out endDate) && beginDate <= endDate)
@@ -144,15 +148,17 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
 
         public ActionResult Source()
         {
-            string search = Request["search"];
-            int count = 0, pageSize = 15; 
+            var userProfile = this.GetUser();
+            var count = 0;
+            var pageSize = 15; 
+            var search = Request["search"];
             var p = Request["page"];
             int page = 0;
             if (p != null) { int.TryParse(p, out page); }
             if (page == 0) { page = 1; }
 
             ViewBag.Selected = "Source";
-            var model = SourceManager.GetSourceList(this.userProfile.UserId, search, page, pageSize, out count); 
+            var model = SourceManager.GetSourceList(userProfile.UserId, search, page, pageSize, out count); 
             ViewBag.PageCount = 1 + (count - 1) / pageSize;
             ViewBag.PageIndex = page;
             return View(model);
@@ -160,15 +166,17 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
 
         public ActionResult DelSource(int id)
         {
-            SourceManager.RemoveSource(this.userProfile.UserId, id);
+            var userProfile = this.GetUser();
+            SourceManager.RemoveSource(userProfile.UserId, id);
             Session["UserSources"] = null;
                 ViewBag.Sources = this.GetSources();
             return RedirectToAction("Source", "Home");
         }
 
-        public ActionResult AddSource(UserSource model)
+        public ActionResult AddSource(SourceView model)
         {
-            SourceManager.AddSource(this.userProfile.UserId, model);
+            var userProfile = this.GetUser();
+            SourceManager.AddSource(BaseConfig.Company, userProfile.UserId, model);
             Session["UserSources"] = null;
             ViewBag.Sources = this.GetSources();
             return RedirectToAction("Source", "Home");
@@ -184,21 +192,24 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
         [HttpGet]
         public JsonResult AddFavor(int id)
         {
-            UserSourceContentLinkManager.AddFavorLink(this.userProfile.UserId, id);
+            var userProfile = this.GetUser();
+            UserSourceContentLinkManager.AddFavorLink(userProfile.UserId, id);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         public JsonResult Read(int id)
         {
-            UserSourceContentLinkManager.RemoveLink(this.userProfile.UserId, id);
+            var userProfile = this.GetUser();
+            UserSourceContentLinkManager.RemoveLink(userProfile.UserId, id);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         public JsonResult RemoveFavor(int id)
         {
-            UserSourceContentLinkManager.RemoveFavorLink(this.userProfile.UserId, id);
+            var userProfile = this.GetUser();
+            UserSourceContentLinkManager.RemoveFavorLink(userProfile.UserId, id);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -210,7 +221,7 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
                 userProfile = UserManager.GetUser(User.Identity.Name);
                 if (userProfile == null)
                 {
-                    throw new Exception("该用户不存在！");
+                    return null;
                 }
 
                 Session["UserProfile"] = userProfile;
@@ -219,15 +230,16 @@ namespace TimiSoft.InformationCollectionWeb.Controllers
             return userProfile;
         }
 
-        private List<UserSource> GetSources()
+        private List<SourceView> GetSources()
         {
-            var userSources = Session["UserSources"] as List<UserSource>;
+            var userSources = Session["UserSources"] as List<SourceView>;
             if (userSources == null)
             {
-                userSources = SourceManager.GetSourceList(this.userProfile.UserId);
+                var userProfile = this.GetUser();
+                userSources = SourceManager.GetSourceList(userProfile.UserId);
                 if (userSources == null)
                 {
-                    userSources = new List<UserSource>();
+                    userSources = new List<SourceView>();
                 }
 
                 Session["UserSources"] = userSources;

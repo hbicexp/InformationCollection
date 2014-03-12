@@ -52,6 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Feedback.cs">
+      <DependentUpon>ICContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ICContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -79,12 +82,15 @@
     <Compile Include="Models\SourceRegexGroup.cs">
       <DependentUpon>ICContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SourceUrl.cs">
+      <DependentUpon>ICContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserProfile.cs">
       <DependentUpon>ICContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DatabaseContext.cs" />
-    <Compile Include="Models\UserSource.cs" />
-    <Compile Include="Models\UserSourceContent.cs" />
+    <Compile Include="Models\SourceView.cs" />
+    <Compile Include="Models\SourceContentView.cs" />
     <Compile Include="Models\UserSourceContentFavorLink.cs">
       <DependentUpon>ICContext.tt</DependentUpon>
     </Compile>

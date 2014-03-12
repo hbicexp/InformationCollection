@@ -15,6 +15,5 @@ namespace TimiSoft.InformationCollection
                 return db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == userName.ToLower());
             }
         }
-               
     }
 }

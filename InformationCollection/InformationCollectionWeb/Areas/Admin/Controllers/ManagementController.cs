@@ -22,7 +22,7 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
         public ActionResult Source()
         {
             var model = SourceManager.GetSourceList();
-            ViewBag.Title = "源管理";
+            ViewBag.Title = "任务管理";
             ViewBag.Selected = "Index";
             return View(model);
         }
@@ -38,7 +38,7 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
             SourceContentManager.ReloadSourceRegexes();
             SourceContentManager.Collect(source, DateTime.Now, SourceContentType.System);
 
-            ViewBag.Title = "源管理";
+            ViewBag.Title = "任务管理";
             ViewBag.Selected = "Index";
             return RedirectToAction("Content", "Management", new { id });
         }
@@ -54,7 +54,7 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
             SourceContentManager.ReloadSourceRegexes();
             SourceContentManager.ClearSourceContents(id);
 
-            ViewBag.Title = "源管理";
+            ViewBag.Title = "任务管理";
             ViewBag.Selected = "Index";
             return RedirectToAction("Content", "Management", new { id });
         }
@@ -63,7 +63,7 @@ namespace TimiSoft.InformationCollectionWeb.Areas.Admin.Controllers
         {
             var model = SourceContentManager.GetSourceContents(id);
 
-            ViewBag.Title = "源管理";
+            ViewBag.Title = "任务管理";
             ViewBag.Selected = "Index";
             return View(model);
         }

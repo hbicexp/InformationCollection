@@ -21,7 +21,7 @@
         <li>@Html.ActionLink("用户管理", "Index", "User", null, ViewBag.Selected == "User" ? cssClass : null)</li>
         @if (Request.IsAuthenticated && User.Identity.Name == "hbwang")
         {
-            <li>@Html.ActionLink("源管理", "Source", "Management", null, ViewBag.Selected == "Index" ? cssClass : null)</li>
+            <li>@Html.ActionLink("任务管理", "Source", "Management", null, ViewBag.Selected == "Index" ? cssClass : null)</li>
             <li>@Html.ActionLink("过滤规则组", "Index", "SourceRegexGroup", null, ViewBag.Selected == "SourceRegexGroup" ? cssClass : null)</li>
             <li>@Html.ActionLink("过滤规则", "Index", "SourceRegex", null, ViewBag.Selected == "SourceRegex" ? cssClass : null)</li>
         }

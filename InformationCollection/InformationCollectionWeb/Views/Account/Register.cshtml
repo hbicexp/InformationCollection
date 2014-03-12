@@ -2,21 +2,19 @@
 @{
     ViewBag.Title = "注册";
 }
-<section id="loginForm">
-
-    <hgroup class="title">
-        <h1>@ViewBag.Title.</h1>
-    </hgroup>
-    <h3 class="form-signin-heading">创建新帐户。</h3>
+<div id="loginForm">
+    <div id="hgroup">
+        <h1 class="title">@ViewBag.Title.</h1>
+        <h3 class="heading">创建新帐户。</h3>
+    </div>
 
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
-        <fieldset>
-            <legend>注册表单</legend>
-            <ol>
+        <div class="account">
+            <ul>
                 <li>
                     @Html.LabelFor(m => m.UserName)
                     @Html.TextBoxFor(m => m.UserName)
@@ -29,16 +27,24 @@
                     @Html.LabelFor(m => m.ConfirmPassword)
                     @Html.PasswordFor(m => m.ConfirmPassword)
                 </li>
-            </ol>
-            <input type="submit" value="注册" />
-        </fieldset>
+                <li>
+                    <input id="Register" type="submit" value="注册" />
+                </li>
+            </ul>
+        </div>
     }
-</section>
+</div>
 
-<section class="social" id="socialLoginForm">
-    <h3>欢迎注册信息采集系统。</h3>
-</section>
+<div id="socialLoginForm" style="width:240px;">
+    <h3>欢迎注册消息采集系统。</h3>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $("#Register").button();
+    });
+</script>
